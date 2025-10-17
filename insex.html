@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>골든듀 CX 역량 강화 프로그램</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f9f9f9;
+        }
+        .slide {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            display: none; /* Initially hidden */
+            flex-direction: column;
+            justify-content: space-between; /* To push nav buttons to bottom */
+            min-height: 700px;
+            border: 1px solid #eee;
+        }
+        .gemini-button {
+            background-color: #c5b358; /* Gold color */
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .gemini-button:hover {
+            background-color: #b3a24f;
+            transform: translateY(-2px);
+        }
+        .nav-button {
+            background-color: #f1f1f1;
+            color: #555;
+            font-weight: bold;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #e0e0e0;
+        }
+        .nav-button:disabled {
+            background-color: #f9f9f9;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #c5b358;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        header { background-color: #2c2c2c; }
+        footer { background-color: #2c2c2c; }
+        h1, h2, h3, h4 { color: #2c2c2c; }
+        input, textarea, select {
+             background-color: #fcfcfc;
+             border-color: #e0e0e0;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #c5b358;
+            box-shadow: 0 0 0 2px rgba(197, 179, 88, 0.2);
+        }
+        /* Progress Indicator Styles */
+        .step { position: relative; }
+        .step-circle {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background-color: #e0e0e0;
+            color: #757575;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            border: 3px solid #e0e0e0;
+        }
+        .step-label { color: #757575; font-size: 0.8rem; margin-top: 0.5rem; transition: all 0.3s ease; }
+        .step.active .step-circle { background-color: #c5b358; color: white; border-color: #c5b358;}
+        .step.active .step-label { font-weight: bold; color: #c5b358; }
+        .step.completed .step-circle { background-color: #fff; color: #c5b358; border-color: #c5b358;}
+        .step-connector { flex-grow: 1; height: 3px; background-color: #e0e0e0; }
+        .learning-objective {
+            background-color: #fefbf1;
+            border-left: 4px solid #c5b358;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .context-box {
+            background-color: #f3f4f6; /* gray-100 */
+            border-left: 4px solid #9ca3af; /* gray-400 */
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="text-white text-center py-10 px-4 shadow-lg">
+        <h1 class="text-4xl md:text-5xl font-black mb-2 text-white">Golden-Dew CX Professional</h1>
+        <p class="text-lg md:text-xl text-[#c5b358]">AI와 함께 고객 경험의 모든 순간을 디자인합니다.</p>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8 max-w-6xl">
+        <div id="progress-indicator" class="flex items-center w-full mb-8"></div>
+        <div id="slideshow-container" class="relative">
+            <!-- Slide 1: 고객 페르소나 만들기 -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M1: 고객 페르소나 만들기</h2>
+                        <span class="font-bold text-gray-400">1 / 7</span>
+                    </div>
+                    <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">고객을 깊이 있게 이해하는 것이 모든 CX의 시작임을 알고, 핵심 고객의 특성을 정의하여 이후 모든 전략의 기준점을 설정합니다.</p>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">💎 골든듀의 핵심 고객 페르소나 정의하기</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">우리 매장을 방문하는 고객의 특성을 구체적으로 입력하여 페르소나를 완성하고, AI를 통해 맞춤형 응대 전략을 얻어보세요.</p>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 w-full max-w-3xl mx-auto">
+                            <div class="space-y-4 text-sm">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="font-bold">페르소나 이름</label><input type="text" id="p1-name" class="w-full p-2 mt-1 border rounded" placeholder="예: 첫 프로포즈를 준비하는 김민준"></div>
+                                    <div><label class="font-bold">나이/직업</label><input type="text" id="p1-info" class="w-full p-2 mt-1 border rounded" placeholder="예: 30대 초반 / 회사원"></div>
+                                </div>
+                                <div><label class="font-bold">방문 목적</label><input type="text" id="p1-purpose" class="w-full p-2 mt-1 border rounded" placeholder="예: 여자친구에게 선물할 프로포즈 반지 구매"></div>
+                                <div><label class="font-bold">구매 결정 요인 (Goals)</label><textarea id="p1-goals" class="w-full p-2 mt-1 border rounded" rows="2" placeholder="예: 그녀가 좋아할 만한 세련된 디자인, 브랜드 신뢰도, 합리적인 예산"></textarea></div>
+                                <div><label class="font-bold">구매 시 어려움 (Pain Points)</label><textarea id="p1-pain" class="w-full p-2 mt-1 border rounded" rows="2" placeholder="예: 주얼리에 대해 잘 모름, 어떤 디자인을 선호할지 확신이 없음, 가격대에 대한 부담감"></textarea></div>
+                                <div><label class="font-bold">주요 정보 채널</label><input type="text" id="p1-channel" class="w-full p-2 mt-1 border rounded" placeholder="예: 인스타그램, 백화점 방문, 친구 추천"></div>
+                                <button id="persona-generator-btn" class="gemini-button w-full mt-4">✨ AI 페르소나 분석 및 응대 전략 제안</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- Slide 2: 고객 경험 여정지도 만들기 -->
+            <div class="slide">
+                 <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M2: 고객 경험 여정 지도 만들기</h2>
+                        <span class="font-bold text-gray-400">2 / 7</span>
+                    </div>
+                    <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">고객이 우리 브랜드를 경험하는 모든 과정을 시각화하여, 긍정적 경험은 강화하고 부정적 경험은 개선할 수 있는 결정적 순간(MOT)을 찾아냅니다.</p>
+                    </div>
+                    <div id="m2-context" class="context-box hidden"></div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 id="journey-title" class="text-xl font-bold mb-4 text-center">🗺️ 고객의 여정을 따라가며 경험 디자인하기</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">M1에서 만든 페르소나가 골든듀를 만나고 구매하기까지의 여정을 단계별로 분석하고, 개선할 아이디어를 찾아보세요.</p>
+                        <div class="space-y-4 text-sm max-w-4xl mx-auto w-full">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div><label class="font-bold">① 인지/탐색 단계</label><textarea id="j-step1" class="w-full p-2 mt-1 border rounded-md" rows="4" placeholder="[접점] 인스타그램 광고, 백화점 쇼윈도&#10;[고객 행동] 광고 클릭, 매장 앞을 지나가다 구경&#10;[긍정/부정 경험] 모델이 착용한 제품이 예뻐 보임 / 가격 정보가 없어 아쉬움"></textarea></div>
+                                <div><label class="font-bold">② 매장 방문/상담 단계</label><textarea id="j-step2" class="w-full p-2 mt-1 border rounded-md" rows="4" placeholder="[접점] 매장 입구, 쇼케이스, 상담 직원&#10;[고객 행동] 제품 착용, 가격 문의, 직원에게 추천 요청&#10;[긍정/부정 경험] 직원이 친절하고 전문적임 / 부담스러운 응대가 불편함"></textarea></div>
+                                <div><label class="font-bold">③ 구매/결제 단계</label><textarea id="j-step3" class="w-full p-2 mt-1 border rounded-md" rows="4" placeholder="[접점] 결제 카운터, 포장&#10;[고객 행동] 멤버십 가입, 상품권 사용, 결제&#10;[긍정/부정 경험] 포장이 고급스러워 만족스러움 / 대기 시간이 길었음"></textarea></div>
+                            </div>
+                            <button id="journey-mapper-btn" class="gemini-button w-full mt-4">✨ AI 여정 분석 및 개선점 제안</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: VOC 분석기 -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M3: AI VOC 분석기</h2>
+                        <span class="font-bold text-gray-400">3 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">고객의 생생한 피드백(VOC) 속에 숨어있는 칭찬과 불만의 진짜 의미를 파악하고, 데이터를 기반으로 개선 포인트를 도출하는 능력을 기릅니다.</p>
+                    </div>
+                    <div id="m3-context" class="context-box hidden"></div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">🗣️ 고객의 목소리에서 기회 발견하기</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">고객이 남긴 리뷰, 칭찬, 불만사항 등 실제 VOC를 입력하고 AI를 통해 핵심 감정과 개선 포인트를 신속하게 파악하세요.</p>
+                        <div class="max-w-2xl mx-auto w-full">
+                            <label for="voc-input" class="font-bold text-sm">실제 고객 VOC 내용 붙여넣기</label>
+                            <textarea id="voc-input" class="w-full p-3 mt-1 border rounded-md" rows="8" placeholder="예: &#10;“프로포즈 목걸이 샀는데 여자친구가 너무 좋아했어요! 상담해주신 매니저님 정말 감사합니다.”&#10;“AS 맡겼는데 생각보다 오래 걸리고 연락도 잘 안돼서 답답했습니다.”&#10;“포장 패키지가 더 고급스러워지면 선물할 때 더 좋을 것 같아요.”"></textarea>
+                            <button id="voc-analyzer-btn" class="gemini-button w-full mt-4">✨ AI VOC 분석 및 개선 아이디어 제안</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: CX 전략 만들기 -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M4: 우리 매장 CX 전략 만들기</h2>
+                        <span class="font-bold text-gray-400">4 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">우리 매장의 강점, 약점, 기회, 위협(SWOT)과 경쟁사 현황을 분석하여, 한정된 자원으로 최대의 효과를 낼 수 있는 CX 과제의 우선순위를 결정합니다.</p>
+                    </div>
+                    <div id="m4-context" class="context-box hidden"></div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 id="strategy-title" class="text-xl font-bold mb-4 text-center">💡 데이터 기반의 차별화된 CX 전략 수립</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">이전 분석 결과와 우리 매장 및 경쟁사 현황을 바탕으로, 실행 가능한 CX 과제를 도출하고 우선순위를 정해보세요.</p>
+                        <div class="max-w-3xl mx-auto w-full bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-4 text-sm">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div><label class="font-bold">Strengths (강점)</label><textarea id="swot-s" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 숙련되고 친절한 직원"></textarea></div>
+                                <div><label class="font-bold">Weaknesses (약점)</label><textarea id="swot-w" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 주말 상담 대기 시간 발생"></textarea></div>
+                                <div><label class="font-bold">Opportunities (기회)</label><textarea id="swot-o" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 근처 웨딩홀 연계 프로모션"></textarea></div>
+                                <div><label class="font-bold">Threats (위협)</label><textarea id="swot-t" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 근처에 경쟁사 신규 매장 오픈"></textarea></div>
+                            </div>
+                            <div>
+                                <label class="font-bold">경쟁사 및 차별점 분석</label>
+                                <textarea id="s-competitor" class="w-full p-2 mt-1 border rounded-md" rows="3" placeholder="예: A경쟁사는 저가 라인업이 강점, B경쟁사는 온라인 마케팅을 활발히 함. 우리는 전문적인 상담과 높은 품질로 승부."></textarea>
+                            </div>
+                            <button id="strategy-generator-btn" class="gemini-button w-full mt-4">✨ AI CX 과제 우선순위 분석</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: 우리 매장만의 시그니처 서비스 만들기 -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M5: 우리 매장만의 시그니처 서비스 만들기</h2>
+                        <span class="font-bold text-gray-400">5 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">수립된 CX 전략을 바탕으로 고객의 기억에 오래 남을 우리 매장만의 독창적인 '시그니처 서비스'를 기획하고 구체화하는 창의적 훈련을 합니다.</p>
+                    </div>
+                    <div id="m5-context" class="context-box hidden"></div>
+                     <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">🌟 고객의 기억에 남을 특별한 경험 설계</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">M4에서 수립한 CX 전략을 실행하고 고객을 감동시킬 우리 매장만의 시그니처 서비스를 AI와 함께 상상하고 구체화해 보세요.</p>
+                         <div class="max-w-2xl mx-auto w-full space-y-4">
+                             <div><label class="font-bold text-sm">우리 매장이 고객에게 전달하고 싶은 핵심 가치</label><input type="text" id="sig-value" class="w-full p-2 mt-1 border rounded-md" placeholder="예: '일생의 가장 빛나는 순간', '섬세한 장인정신'"></div>
+                             <div><label class="font-bold text-sm">고객에게 어떤 특별한 감성을 선물하고 싶나요?</label><textarea id="sig-emotion" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 존중받는 느낌, 나만을 위한 특별함, 설렘과 감동"></textarea></div>
+                             <div><label class="font-bold text-sm">이를 위해 어떤 서비스를 제공할 수 있을까요? (자유롭게 상상)</label><textarea id="sig-idea" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 프로포즈를 위한 반지 케이스 커스터마이징, 구매 주얼리와 어울리는 향수 샘플 증정"></textarea></div>
+                             <button id="signature-service-btn" class="gemini-button w-full mt-4">✨ AI 시그니처 서비스 아이디어 구체화</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: 고객과의 스크립트 대화문 만들기 -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M6: SPIN 기반 상담 스크립트 만들기</h2>
+                        <span class="font-bold text-gray-400">6 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">단순 상품 판매를 넘어 고객의 숨겨진 니즈를 이끌어내는 SPIN 셀링 화법을 익히고, 실제 상담 상황에 바로 적용할 수 있는 맞춤형 스크립트를 생성합니다.</p>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">💬 고객의 마음을 여는 질문의 기술, SPIN</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">고객 유형별 상황에 맞는 SPIN 질문을 활용하여, 고객 스스로 가치를 발견하고 구매 결정을 내리게 하는 대화 스크립트를 생성해 보세요.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div class="flex flex-col items-center p-4 border border-gray-200 rounded-lg text-center bg-gray-50">
+                                <span class="text-4xl mb-2">🎁</span>
+                                <h4 class="font-bold">선물 고민형</h4>
+                                <p class="text-xs text-gray-600 mt-1 mb-4 flex-grow">기념일/프로포즈 선물을 고민하지만, 어떤 것을 골라야 할지 막막해하는 고객.</p>
+                                <button class="gemini-button script-generator-btn mt-auto text-sm" data-type="선물 고민형" data-desc="기념일/프로포즈 선물을 고민하지만, 어떤 것을 골라야 할지 막막해하는 고객. 상대방의 취향을 잘 모르고, 실패에 대한 두려움이 있다.">스크립트 생성</button>
+                            </div>
+                             <div class="flex flex-col items-center p-4 border border-gray-200 rounded-lg text-center bg-gray-50">
+                                <span class="text-4xl mb-2">🧐</span>
+                                <h4 class="font-bold">가치 투자형</h4>
+                                <p class="text-xs text-gray-600 mt-1 mb-4 flex-grow">주얼리를 자신을 위한 투자 또는 자산으로 생각하며, 품질과 희소성을 중요하게 여기는 고객.</p>
+                                 <button class="gemini-button script-generator-btn mt-auto text-sm" data-type="가치 투자형" data-desc="주얼리를 자신을 위한 투자 또는 자산으로 생각하며, 다이아몬드 등급, 소재, 환금성 등 객관적인 가치를 중요하게 여기는 고객.">스크립트 생성</button>
+                            </div>
+                             <div class="flex flex-col items-center p-4 border border-gray-200 rounded-lg text-center bg-gray-50">
+                                <span class="text-4xl mb-2">🎨</span>
+                                <h4 class="font-bold">디자인 중시형</h4>
+                                <p class="text-xs text-gray-600 mt-1 mb-4 flex-grow">자신만의 스타일이 확고하며, 독창적이고 트렌디한 디자인을 찾는 고객.</p>
+                                 <button class="gemini-button script-generator-btn mt-auto text-sm" data-type="디자인 중시형" data-desc="자신만의 스타일이 확고하며, 남들과 다른 독창적이고 트렌디한 디자인을 찾는 고객. 브랜드 스토리와 디자인 컨셉에 관심이 많다.">스크립트 생성</button>
+                            </div>
+                        </div>
+                        <div id="persona-spin-section" class="hidden mt-6 p-4 border-2 border-dashed border-yellow-400 rounded-lg text-center bg-yellow-50">
+                            <span class="text-4xl mb-2">👤</span>
+                            <h4 id="persona-spin-title" class="font-bold"></h4>
+                            <p class="text-xs text-gray-600 mt-1 mb-4">M1에서 생성한 페르소나에 대한 맞춤형 스크립트를 생성합니다.</p>
+                            <button id="persona-script-generator-btn" class="gemini-button mt-auto text-sm">페르소나 맞춤 스크립트 생성</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Slide 7: 최종 요약 및 정리 -->
+            <div class="slide">
+                 <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M7: 최종 요약 및 정리</h2>
+                        <span class="font-bold text-gray-400">7 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">모든 학습 과정을 복습하고, AI의 최종 제언을 통해 우리 매장만의 CX 전략을 완성하여 실제 업무에 적용할 수 있는 구체적인 액션 플랜을 수립합니다.</p>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">📋 CX 디자인 워크샵 결과 보고서</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">지금까지 진행한 모든 모듈의 결과입니다. 아래 버튼을 눌러 AI의 최종 종합 분석을 받아보세요.</p>
+                        <div id="summary-content" class="flex-grow overflow-y-auto p-4 bg-gray-100 rounded-lg border max-h-[400px] space-y-6">
+                            <!-- Summary sections will be populated by JS -->
+                        </div>
+                        <button id="final-report-btn" class="gemini-button w-full mt-6">✨ AI 종합 분석 및 최종 제언 받기</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Navigation buttons container -->
+        <div id="navigation-container" class="flex justify-between items-center mt-8">
+            <button id="prev-btn" class="nav-button">❮ 이전 단계로</button>
+            <button id="next-btn" class="nav-button">다음 단계로 ❯</button>
+        </div>
+    </main>
+
+    <!-- Gemini Modal -->
+    <div id="gemini-modal" class="fixed inset-0 bg-gray-800 bg-opacity-60 overflow-y-auto h-full w-full hidden z-50 flex items-center justify-center p-4">
+        <div class="relative mx-auto p-5 border w-full max-w-3xl shadow-lg rounded-xl bg-white">
+            <div class="mt-3">
+                <div class="flex justify-between items-center mb-4 pb-3 border-b">
+                    <h3 id="modal-title" class="text-lg leading-6 font-bold text-gray-900">✨ AI 생성 결과</h3>
+                    <button id="close-modal-button" class="text-gray-400 hover:text-gray-600 text-3xl font-light">&times;</button>
+                </div>
+                <div id="modal-content" class="mt-2 px-2 py-3 max-h-[60vh] overflow-y-auto">
+                    <div id="modal-loader" class="flex justify-center items-center py-10">
+                        <div class="spinner"></div>
+                        <p class="ml-4 text-gray-600">AI가 분석 중입니다. 잠시만 기다려주세요...</p>
+                    </div>
+                    <div id="modal-text" class="text-sm text-gray-700 text-left whitespace-pre-wrap leading-relaxed"></div>
+                </div>
+                <div class="flex justify-end items-center px-4 py-3 mt-4 border-t bg-gray-50 rounded-b-xl">
+                    <span id="copy-success" class="text-sm text-green-600 mr-4 hidden">복사 완료!</span>
+                    <button id="regenerate-button" class="gemini-button text-sm mr-2">✨ 다시 생성</button>
+                    <button id="copy-button" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 text-sm">내용 복사</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="text-white text-center py-6 px-4 mt-12">
+        <p class="text-sm text-gray-400">&copy; 2025 Golden-Dew CX Professional Program. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const trainingData = { modulesCompleted: new Set() };
+            const moduleTitles = ["페르소나", "여정 지도", "VOC 분석", "CX 전략", "시그니처 서비스", "SPIN 스크립트", "최종 요약"];
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const progressIndicator = document.getElementById('progress-indicator');
+            let currentSlide = 0;
+
+            function setupProgressIndicator() {
+                progressIndicator.innerHTML = '';
+                moduleTitles.forEach((title, index) => {
+                    const step = document.createElement('div');
+                    step.className = 'step flex flex-col items-center text-center flex-1';
+                    step.innerHTML = `<span class="step-circle">${index + 1}</span><span class="step-label">${title}</span>`;
+                    progressIndicator.appendChild(step);
+
+                    if (index < moduleTitles.length - 1) {
+                        const connector = document.createElement('div');
+                        connector.className = 'step-connector';
+                        progressIndicator.appendChild(connector);
+                    }
+                });
+            }
+
+            function updateProgressIndicator() {
+                const steps = progressIndicator.querySelectorAll('.step');
+                steps.forEach((step, i) => {
+                    step.classList.remove('active', 'completed');
+                    if (i === currentSlide) {
+                        step.classList.add('active');
+                    } else if (trainingData.modulesCompleted.has(i)) {
+                        step.classList.add('completed');
+                        step.querySelector('.step-circle').innerHTML = '✓';
+                    } else {
+                        step.querySelector('.step-circle').innerHTML = i + 1;
+                    }
+                });
+            }
+            
+            function populateSummaryPage() {
+                const summaryContainer = document.getElementById('summary-content');
+                let content = '';
+                
+                const modules = [
+                    { title: 'M1: 고객 페르소나', data: trainingData.persona, fields: {name: '이름', info: '정보', purpose: '목적', pain: '어려움'} },
+                    { title: 'M2: 고객 경험 여정 지도', data: trainingData.journey, fields: {step1: '인지/탐색', step2: '방문/상담', step3: '구매/결제'} },
+                    { title: 'M3: VOC 분석', data: trainingData, fields: {vocInput: '입력된 VOC'} },
+                    { title: 'M4: CX 전략 수립 정보', data: trainingData.strategy, fields: {swot_s: '강점', swot_w: '약점', swot_o: '기회', swot_t: '위협', competitor: '경쟁사 분석'} }
+                ];
+
+                modules.forEach(module => {
+                    content += `<div class="p-4 bg-white rounded-lg shadow-sm"><h4 class="font-bold text-base mb-2 text-gray-800">${module.title}</h4>`;
+                    if (module.data && Object.values(module.data).some(v => v)) {
+                        content += '<div class="text-sm space-y-1 text-gray-600">';
+                        for (const [field, label] of Object.entries(module.fields)) {
+                             if(module.data[field]) {
+                                content += `<p class="whitespace-pre-wrap"><strong>${label}:</strong> ${module.data[field]}</p>`;
+                             }
+                        }
+                        content += '</div>';
+                    } else {
+                        content += '<p class="text-sm text-gray-500">아직 데이터가 없습니다.</p>';
+                    }
+                    content += '</div>';
+                });
+                
+                summaryContainer.innerHTML = content;
+            }
+            
+            function updateContextualData(index) {
+                const contextBoxes = [
+                    null, // M1 has no context box
+                    document.getElementById('m2-context'),
+                    document.getElementById('m3-context'),
+                    document.getElementById('m4-context'),
+                    document.getElementById('m5-context'),
+                ];
+                
+                // Hide all context boxes first
+                contextBoxes.forEach(box => box?.classList.add('hidden'));
+
+                if(index > 0 && index < contextBoxes.length) {
+                    const box = contextBoxes[index];
+                    let html = '';
+                    let hasContext = false;
+                    switch(index) {
+                        case 1: // M2
+                            if (trainingData.persona?.name) {
+                                html = `<p class="font-bold text-sm">M1 결과: '${trainingData.persona.name}' 페르소나</p>
+                                        <p class="text-xs mt-1"><strong>주요 어려움(Pain Point):</strong> ${trainingData.persona.pain || 'N/A'}</p>`;
+                                hasContext = true;
+                            }
+                            break;
+                        case 2: // M3
+                             if (trainingData.persona?.name) {
+                                html = `<p class="font-bold text-sm">CONTEXT: '${trainingData.persona.name}' 고객과 같은 분들이 남겼을 VOC를 상상하며 분석해보세요.</p>`;
+                                hasContext = true;
+                            }
+                            break;
+                        case 3: // M4
+                            html = '<p class="font-bold text-sm">CONTEXT: 이전 단계 분석 결과</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
+                            if (trainingData.persona?.pain) { html += `<li><strong>페르소나 핵심 니즈:</strong> ${trainingData.persona.pain}</li>`; hasContext = true; }
+                            if (trainingData.journey?.step2) { html += `<li><strong>여정 지도 개선점:</strong> 상담 단계 경험 개선 필요</li>`; hasContext = true; }
+                            if (trainingData.vocInput) { html += `<li><strong>VOC 입력됨:</strong> "${trainingData.vocInput.substring(0,30)}..."</li>`; hasContext = true; }
+                            html += '</ul>';
+                            break;
+                        case 4: // M5
+                            html = '<p class="font-bold text-sm">CONTEXT: 이전 단계 분석 결과</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
+                            if (trainingData.persona?.name) { html += `<li><strong>타겟 고객:</strong> ${trainingData.persona.name} (${trainingData.persona.purpose})</li>`; hasContext = true; }
+                            if (trainingData.strategy?.swot_s) { html += `<li><strong>우리 매장 강점 활용:</strong> ${trainingData.strategy.swot_s}</li>`; hasContext = true; }
+                            html += '</ul>';
+                            break;
+                    }
+                    if(hasContext) {
+                        box.innerHTML = html;
+                        box.classList.remove('hidden');
+                    }
+                }
+            }
+
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.style.display = 'none';
+                });
+                slides[index].style.display = 'flex';
+                
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === slides.length - 1;
+
+                updateProgressIndicator();
+                updateContextualData(index);
+
+                if (index === slides.length - 1) {
+                    populateSummaryPage();
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    trainingData.modulesCompleted.add(currentSlide);
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+            
+            setupProgressIndicator();
+            showSlide(currentSlide);
+
+            const modal = document.getElementById('gemini-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalLoader = document.getElementById('modal-loader');
+            const modalText = document.getElementById('modal-text');
+            const closeModalButton = document.getElementById('close-modal-button');
+            const regenerateButton = document.getElementById('regenerate-button');
+            const copyButton = document.getElementById('copy-button');
+            const copySuccessMessage = document.getElementById('copy-success');
+
+            let lastPrompt = '';
+
+            const openModal = () => modal.classList.remove('hidden');
+            const closeModal = () => modal.classList.add('hidden');
+
+            closeModalButton.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            async function callGeminiAPI(prompt, retries = 3, delay = 1000) {
+                const apiKey = "AIzaSyB0GwdQwPzmHqOjLh42nyZg7-YNKs9Ama0";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const payload = { contents: [{ parts: [{ text: prompt }] }] };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const result = await response.json();
+                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "결과를 생성할 수 없습니다.";
+                } catch (error) {
+                    console.error("API call failed:", error);
+                    if (retries > 0) {
+                        await new Promise(res => setTimeout(res, delay));
+                        return callGeminiAPI(prompt, retries - 1, delay * 2);
+                    } else {
+                        return "오류가 발생했습니다. 잠시 후 다시 시도해 주세요.";
+                    }
+                }
+            }
+            
+            function formatResponse(text) {
+                return text
+                    .replace(/(\*\*|### |## |# )/g, '')
+                    .replace(/\* (.*?):/g, '<strong class="font-bold text-gray-900">$1:</strong>')
+                    .replace(/^- (.*?)$/gm, '<li class="ml-4 list-disc">$1</li>')
+                    .replace(/(?:\r\n|\r|\n){2,}/g, '<br><br>');
+            }
+
+            async function generateContent(prompt, title) {
+                lastPrompt = prompt;
+                modalTitle.textContent = title;
+                modalText.innerHTML = '';
+                modalLoader.style.display = 'flex';
+                copySuccessMessage.classList.add('hidden');
+                openModal();
+                const result = await callGeminiAPI(prompt);
+                modalLoader.style.display = 'none';
+                modalText.innerHTML = formatResponse(result);
+            }
+            
+            regenerateButton.addEventListener('click', () => {
+                if (lastPrompt) generateContent(lastPrompt, modalTitle.textContent);
+            });
+
+            copyButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(modalText.innerText).then(() => {
+                    copySuccessMessage.classList.remove('hidden');
+                    setTimeout(() => copySuccessMessage.classList.add('hidden'), 2000);
+                }).catch(err => console.error('Failed to copy: ', err));
+            });
+
+            // Slide 1: Persona
+            document.getElementById('persona-generator-btn')?.addEventListener('click', () => {
+                trainingData.persona = {
+                    name: document.getElementById('p1-name').value, info: document.getElementById('p1-info').value,
+                    purpose: document.getElementById('p1-purpose').value, goals: document.getElementById('p1-goals').value,
+                    pain: document.getElementById('p1-pain').value, channel: document.getElementById('p1-channel').value
+                };
+                if (!trainingData.persona.name) { alert('페르소나 이름을 입력해주세요.'); return; }
+                const prompt = `당신은 '골든듀' CX 컨설턴트입니다. 아래 고객 페르소나 정보를 바탕으로, 숨겨진 니즈를 파악하고, 최상의 고객 경험을 제공하기 위한 맞춤형 응대 전략 3가지를 제안해주세요.\n### 고객 페르소나 정보\n${JSON.stringify(trainingData.persona, null, 2)}\n### 요청사항\n1. **페르소나 심층 분석**: 고객의 감정(불안감, 기대감 등)과 진짜 니즈를 추론하여 분석해주세요.\n2. **맞춤형 응대 전략**: 불안감 해소 및 신뢰를 줄 수 있는 구체적인 응대 멘트와 행동 3가지를 제안해주세요.`;
+                generateContent(prompt, `'${trainingData.persona.name}' 페르소나 분석`);
+                document.getElementById('journey-title').textContent = `🗺️ '${trainingData.persona.name}'님의 여정 지도 만들기`;
+                document.getElementById('strategy-title').textContent = `💡 '${trainingData.persona.name}'님을 위한 CX 전략`;
+                document.getElementById('persona-spin-title').textContent = `'${trainingData.persona.name}' 고객 맞춤`;
+                document.getElementById('persona-spin-section').classList.remove('hidden');
+            });
+            
+            // Slide 2: Journey
+            document.getElementById('journey-mapper-btn')?.addEventListener('click', () => {
+                trainingData.journey = { step1: document.getElementById('j-step1').value, step2: document.getElementById('j-step2').value, step3: document.getElementById('j-step3').value };
+                if (!trainingData.journey.step1) { alert('여정 단계를 입력해주세요.'); return; }
+                const personaContext = trainingData.persona ? ` M1의 '${trainingData.persona.name}' 페르소나 여정이라고 가정합니다.` : '';
+                const prompt = `당신은 '골든듀' CX 디자이너입니다. 아래 고객 경험 여정 지도를 분석하여, 단계별 경험을 향상시킬 결정적 순간(MOT)을 찾아내고, 개선 아이디어 3가지를 제안해주세요.${personaContext}\n### 고객 경험 여정 지도\n${JSON.stringify(trainingData.journey, null, 2)}\n### 요청사항\n1. **핵심 Pain Point 진단**: 각 단계의 불편함을 명확하게 진단해주세요.\n2. **MOT 개선 아이디어**: 진단된 문제점을 해결하고 감동을 줄 수 있는 실행 방안 3가지를 제안해주세요.`;
+                generateContent(prompt, `고객 경험 여정 지도 분석`);
+            });
+
+            // Slide 3: VOC
+            document.getElementById('voc-analyzer-btn')?.addEventListener('click', () => {
+                trainingData.vocInput = document.getElementById('voc-input').value;
+                if (!trainingData.vocInput) { alert('VOC 내용을 입력해주세요.'); return; }
+                const prompt = `당신은 '골든듀' CX 데이터 분석가입니다. 아래 VOC 내용을 분석하여 체계적으로 정리하고, 실행 가능한 개선 방안을 제안해주세요.\n### 고객 VOC 원문\n${trainingData.vocInput}\n### 분석 요청사항\n1. **VOC 요약 및 감정 분류**\n2. **관련 부서 및 프로세스 식별**\n3. **근본 원인 추론**\n4. **Action Item 제안 (단기/장기)**`;
+                generateContent(prompt, `AI VOC 심층 분석 보고서`);
+            });
+            
+            // Slide 4: Strategy
+            document.getElementById('strategy-generator-btn')?.addEventListener('click', () => {
+                trainingData.strategy = {
+                    swot_s: document.getElementById('swot-s').value, swot_w: document.getElementById('swot-w').value,
+                    swot_o: document.getElementById('swot-o').value, swot_t: document.getElementById('swot-t').value,
+                    competitor: document.getElementById('s-competitor').value
+                };
+                if (!trainingData.strategy.swot_s) { alert('SWOT 분석을 입력해주세요.'); return; }
+                const contextPrompt = `### 종합 데이터\n- **페르소나**: ${JSON.stringify(trainingData.persona)}\n- **여정 Pain Point**: ${trainingData.journey?.step2}\n- **VOC**: ${trainingData.vocInput?.substring(0, 50)}...`;
+                const prompt = `당신은 '골든듀' CX 전략가입니다. 아래 데이터를 바탕으로, 실행 가능한 CX 개선 과제를 도출하고 우선순위를 정해주세요.\n${contextPrompt}\n### 우리 매장 SWOT 및 경쟁사 분석\n${JSON.stringify(trainingData.strategy, null, 2)}\n### 요청사항\n1. **CX 개선 과제 5가지 도출**\n2. **과제 평가 (중요도, 시급성, 실현가능성)**: '상', '중', '하'로 평가\n3. **우선순위 선정 및 이유**: 1순위 과제 선정 및 이유 설명`;
+                generateContent(prompt, `우리 매장 CX 과제 우선순위 분석`);
+            });
+
+            // Slide 5: Signature Service
+            document.getElementById('signature-service-btn')?.addEventListener('click', () => {
+                 trainingData.signature = { value: document.getElementById('sig-value').value, emotion: document.getElementById('sig-emotion').value, idea: document.getElementById('sig-idea').value };
+                if (!trainingData.signature.value) { alert('핵심 가치를 입력해주세요.'); return; }
+                const contextPrompt = trainingData.persona ? `\n* **주요 타겟 고객**: '${trainingData.persona.name}' 같은 고객(${trainingData.persona.pain})에게 특별한 경험을 제공해야 함.\n` : '';
+                const prompt = `당신은 서비스 디자이너입니다. '골든듀' 매장이 '시그니처 서비스'를 만들고자 합니다. 아래 정보를 바탕으로 독창적이고 실행 가능한 아이디어 3가지를 구체적으로 제안해주세요.\n### 기획 방향\n${JSON.stringify(trainingData.signature, null, 2)}${contextPrompt}\n### 요청사항\n1. **서비스 컨셉 정의** (이름, 한 문장 컨셉)\n2. **구체적인 실행 방법** (시나리오)\n3. **필요 자원 및 준비사항**`;
+                generateContent(prompt, `우리 매장 시그니처 서비스 아이데이션`);
+            });
+
+            // Slide 6: Generic Script
+            document.querySelectorAll('.script-generator-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const type = button.dataset.type;
+                    const desc = button.dataset.desc;
+                    let contextPrompt = `\n참고로, 현재 매장의 주요 타겟 고객 페르소나는 '${trainingData.persona?.name}'(${trainingData.persona?.purpose})이며, ${trainingData.persona?.pain} 등의 어려움을 겪고 있습니다. 우리 매장의 강점은 '${trainingData.strategy?.swot_s}'입니다. 이 점을 스크립트에 자연스럽게 반영해주세요.\n`;
+                    const prompt = `당신은 '골든듀' VVIP 상담 전문가입니다. '${type}' 고객을 응대할 때 사용할 SPIN 셀링 기반 상담 스크립트를 작성해주세요.\n- **기본 고객 특징**: "${desc}"\n${contextPrompt}\n### 요청사항\n1. **SPIN 단계별 대화 스크립트 작성**\n2. **각 질문의 의도 설명**`;
+                    generateContent(prompt, `'${type}' 고객 맞춤 SPIN 스크립트`);
+                });
+            });
+
+            // Slide 6: Persona Script
+            document.getElementById('persona-script-generator-btn').addEventListener('click', () => {
+                if (!trainingData.persona) { alert("M1에서 페르소나를 먼저 생성해주세요."); return; }
+                const { name, purpose, goals, pain } = trainingData.persona;
+                const prompt = `당신은 '골든듀' VVIP 상담 전문가입니다. '${name}' 고객님을 위한 맞춤형 SPIN 셀링 상담 스크립트를 작성해주세요.\n- **고객 정보**: ${JSON.stringify(trainingData.persona, null, 2)}\n이 정보를 바탕으로, 고객의 어려움을 해결하고 기대를 충족시켜줄 수 있는 SPIN 단계별 질문과 응대 멘트를 포함한 전체 대화 스크립트를 작성해주세요.`;
+                generateContent(prompt, `'${name}' 고객 맞춤형 SPIN 스크립트`);
+            });
+
+            // Slide 7: Final Report
+            document.getElementById('final-report-btn')?.addEventListener('click', () => {
+                const finalPrompt = `당신은 '골든듀'의 수석 CX 컨설턴트입니다. 아래는 한 매장의 CX 디자인 워크샵 결과 데이터입니다. 이 모든 데이터를 종합적으로 분석하여, 해당 매장이 앞으로 실행해야 할 최종적인 CX 전략과 구체적인 액션 플랜을 담은 최종 보고서를 작성해주세요.
+
+### M1: 고객 페르소나
+${JSON.stringify(trainingData.persona, null, 2)}
+
+### M2: 고객 경험 여정 지도
+${JSON.stringify(trainingData.journey, null, 2)}
+
+### M3: VOC 분석
+${trainingData.vocInput}
+
+### M4: SWOT 및 경쟁사 분석
+${JSON.stringify(trainingData.strategy, null, 2)}
+
+### 최종 보고서 요청사항
+1. **현황 진단**: 수집된 모든 데이터를 바탕으로 이 매장의 CX 현주소를 한 문단으로 요약 진단해주세요.
+2. **핵심 전략 방향 제시**: 진단 결과를 바탕으로, 이 매장이 나아가야 할 가장 중요한 CX 전략 방향을 1~2가지 제시해주세요.
+3. **통합 액션 플랜**: M1~M4의 내용을 모두 관통하는 구체적인 실행 과제를 3가지 제안하고, 각 과제를 어떤 순서로 실행해야 할지 로드맵을 그려주세요.
+4. **기대효과 및 마무리**: 제안된 전략 실행 시 기대할 수 있는 효과를 설명하고, 매장 직원들에게 동기를 부여하는 메시지로 마무리해주세요.`;
+                generateContent(finalPrompt, "CX 디자인 워크샵 최종 보고서");
+            });
+
+        });
+    </script>
+</body>
+</html>
+
