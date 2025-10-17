@@ -273,34 +273,16 @@
                         <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
                         <p class="text-xs text-gray-600">단순 상품 판매를 넘어 고객의 숨겨진 니즈를 이끌어내는 SPIN 셀링 화법을 익히고, 실제 상담 상황에 바로 적용할 수 있는 맞춤형 스크립트를 생성합니다.</p>
                     </div>
+                    <div id="m6-context" class="context-box hidden"></div>
                     <div class="flex-grow flex flex-col justify-center">
                         <h3 class="text-xl font-bold mb-4 text-center">💬 고객의 마음을 여는 질문의 기술, SPIN</h3>
-                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">고객 유형별 상황에 맞는 SPIN 질문을 활용하여, 고객 스스로 가치를 발견하고 구매 결정을 내리게 하는 대화 스크립트를 생성해 보세요.</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            <div class="flex flex-col items-center p-4 border border-gray-200 rounded-lg text-center bg-gray-50">
-                                <span class="text-4xl mb-2">🎁</span>
-                                <h4 class="font-bold">선물 고민형</h4>
-                                <p class="text-xs text-gray-600 mt-1 mb-4 flex-grow">기념일/프로포즈 선물을 고민하지만, 어떤 것을 골라야 할지 막막해하는 고객.</p>
-                                <button class="gemini-button script-generator-btn mt-auto text-sm" data-type="선물 고민형" data-desc="기념일/프로포즈 선물을 고민하지만, 어떤 것을 골라야 할지 막막해하는 고객. 상대방의 취향을 잘 모르고, 실패에 대한 두려움이 있다.">스크립트 생성</button>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">아래에 구체적인 상담 상황을 입력하고, 이전 단계의 분석 결과를 모두 종합한 최적의 상담 스크립트를 생성해보세요.</p>
+                        <div class="max-w-3xl mx-auto w-full bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-4 text-sm">
+                            <div>
+                                <label class="font-bold">상담이 필요한 구체적인 상황을 입력해주세요</label>
+                                <textarea id="m6-situation" class="w-full p-2 mt-1 border rounded-md" rows="5" placeholder="예: 여자친구 생일선물로 목걸이를 보고 있는데, 예산은 50만원 정도입니다. 어떤 걸 추천해야 할지 잘 모르겠습니다. 여자친구는 평소에 심플한 스타일을 선호합니다."></textarea>
                             </div>
-                             <div class="flex flex-col items-center p-4 border border-gray-200 rounded-lg text-center bg-gray-50">
-                                <span class="text-4xl mb-2">🧐</span>
-                                <h4 class="font-bold">가치 투자형</h4>
-                                <p class="text-xs text-gray-600 mt-1 mb-4 flex-grow">주얼리를 자신을 위한 투자 또는 자산으로 생각하며, 품질과 희소성을 중요하게 여기는 고객.</p>
-                                 <button class="gemini-button script-generator-btn mt-auto text-sm" data-type="가치 투자형" data-desc="주얼리를 자신을 위한 투자 또는 자산으로 생각하며, 다이아몬드 등급, 소재, 환금성 등 객관적인 가치를 중요하게 여기는 고객.">스크립트 생성</button>
-                            </div>
-                             <div class="flex flex-col items-center p-4 border border-gray-200 rounded-lg text-center bg-gray-50">
-                                <span class="text-4xl mb-2">🎨</span>
-                                <h4 class="font-bold">디자인 중시형</h4>
-                                <p class="text-xs text-gray-600 mt-1 mb-4 flex-grow">자신만의 스타일이 확고하며, 독창적이고 트렌디한 디자인을 찾는 고객.</p>
-                                 <button class="gemini-button script-generator-btn mt-auto text-sm" data-type="디자인 중시형" data-desc="자신만의 스타일이 확고하며, 남들과 다른 독창적이고 트렌디한 디자인을 찾는 고객. 브랜드 스토리와 디자인 컨셉에 관심이 많다.">스크립트 생성</button>
-                            </div>
-                        </div>
-                        <div id="persona-spin-section" class="hidden mt-6 p-4 border-2 border-dashed border-yellow-400 rounded-lg text-center bg-yellow-50">
-                            <span class="text-4xl mb-2">👤</span>
-                            <h4 id="persona-spin-title" class="font-bold"></h4>
-                            <p class="text-xs text-gray-600 mt-1 mb-4">M1에서 생성한 페르소나에 대한 맞춤형 스크립트를 생성합니다.</p>
-                            <button id="persona-script-generator-btn" class="gemini-button mt-auto text-sm">페르소나 맞춤 스크립트 생성</button>
+                            <button id="final-script-generator-btn" class="gemini-button w-full mt-4">✨ AI 맞춤 상담 스크립트 생성</button>
                         </div>
                     </div>
                 </div>
@@ -438,14 +420,14 @@
             
             function updateContextualData(index) {
                 const contextBoxes = [
-                    null, // M1 has no context box
+                    null, // M1
                     document.getElementById('m2-context'),
                     document.getElementById('m3-context'),
                     document.getElementById('m4-context'),
                     document.getElementById('m5-context'),
+                    document.getElementById('m6-context'),
                 ];
                 
-                // Hide all context boxes first
                 contextBoxes.forEach(box => box?.classList.add('hidden'));
 
                 if(index > 0 && index < contextBoxes.length) {
@@ -455,7 +437,7 @@
                     switch(index) {
                         case 1: // M2
                             if (trainingData.persona?.name) {
-                                html = `<p class="font-bold text-sm">M1 결과: '${trainingData.persona.name}' 페르소나</p>
+                                html = `<p class="font-bold text-sm">M1 결과 불러오기: '${trainingData.persona.name}' 페르소나</p>
                                         <p class="text-xs mt-1"><strong>주요 어려움(Pain Point):</strong> ${trainingData.persona.pain || 'N/A'}</p>`;
                                 hasContext = true;
                             }
@@ -467,17 +449,31 @@
                             }
                             break;
                         case 3: // M4
-                            html = '<p class="font-bold text-sm">CONTEXT: 이전 단계 분석 결과</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
+                            html = '<p class="font-bold text-sm">CONTEXT: 이전 단계 분석 결과 불러오기</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
                             if (trainingData.persona?.pain) { html += `<li><strong>페르소나 핵심 니즈:</strong> ${trainingData.persona.pain}</li>`; hasContext = true; }
                             if (trainingData.journey?.step2) { html += `<li><strong>여정 지도 개선점:</strong> 상담 단계 경험 개선 필요</li>`; hasContext = true; }
                             if (trainingData.vocInput) { html += `<li><strong>VOC 입력됨:</strong> "${trainingData.vocInput.substring(0,30)}..."</li>`; hasContext = true; }
                             html += '</ul>';
                             break;
                         case 4: // M5
-                            html = '<p class="font-bold text-sm">CONTEXT: 이전 단계 분석 결과</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
+                            html = '<p class="font-bold text-sm">CONTEXT: 이전 단계 분석 결과 불러오기</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
                             if (trainingData.persona?.name) { html += `<li><strong>타겟 고객:</strong> ${trainingData.persona.name} (${trainingData.persona.purpose})</li>`; hasContext = true; }
                             if (trainingData.strategy?.swot_s) { html += `<li><strong>우리 매장 강점 활용:</strong> ${trainingData.strategy.swot_s}</li>`; hasContext = true; }
                             html += '</ul>';
+                            break;
+                        case 5: // M6
+                            html = '<p class="font-bold text-sm">M1~M5 핵심 결과 불러오기</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
+                            if (trainingData.persona?.name) { html += `<li><strong>M1 페르소나:</strong> ${trainingData.persona.name} (${trainingData.persona.purpose}, ${trainingData.persona.pain})</li>`; hasContext = true; }
+                            if (trainingData.journey?.step2) { html += `<li><strong>M2 여정 Pain Point:</strong> 상담 단계 경험 개선 필요</li>`; hasContext = true; }
+                            if (trainingData.vocInput) { html += `<li><strong>M3 VOC 핵심:</strong> "${trainingData.vocInput.substring(0,25)}..."</li>`; hasContext = true; }
+                            if (trainingData.strategy?.swot_s) { html += `<li><strong>M4 매장 강점:</strong> ${trainingData.strategy.swot_s}</li>`; hasContext = true; }
+                            if (trainingData.signature?.value) { html += `<li><strong>M5 핵심 가치:</strong> ${trainingData.signature.value}</li>`; hasContext = true; }
+                            
+                            if (!hasContext) {
+                                html = '<p class="font-bold text-sm">이전 단계의 데이터가 없습니다.</p><p class="text-xs mt-1">스크립트 생성을 위해 M1부터 진행해주세요.</p>';
+                            } else {
+                                html += '</ul>';
+                            }
                             break;
                     }
                     if(hasContext) {
@@ -611,8 +607,6 @@
                 generateContent(prompt, `'${trainingData.persona.name}' 페르소나 분석`);
                 document.getElementById('journey-title').textContent = `🗺️ '${trainingData.persona.name}'님의 여정 지도 만들기`;
                 document.getElementById('strategy-title').textContent = `💡 '${trainingData.persona.name}'님을 위한 CX 전략`;
-                document.getElementById('persona-spin-title').textContent = `'${trainingData.persona.name}' 고객 맞춤`;
-                document.getElementById('persona-spin-section').classList.remove('hidden');
             });
             
             // Slide 2: Journey
@@ -654,23 +648,33 @@
                 generateContent(prompt, `우리 매장 시그니처 서비스 아이데이션`);
             });
 
-            // Slide 6: Generic Script
-            document.querySelectorAll('.script-generator-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    const type = button.dataset.type;
-                    const desc = button.dataset.desc;
-                    let contextPrompt = `\n참고로, 현재 매장의 주요 타겟 고객 페르소나는 '${trainingData.persona?.name}'(${trainingData.persona?.purpose})이며, ${trainingData.persona?.pain} 등의 어려움을 겪고 있습니다. 우리 매장의 강점은 '${trainingData.strategy?.swot_s}'입니다. 이 점을 스크립트에 자연스럽게 반영해주세요.\n`;
-                    const prompt = `당신은 '골든듀' VVIP 상담 전문가입니다. '${type}' 고객을 응대할 때 사용할 SPIN 셀링 기반 상담 스크립트를 작성해주세요.\n- **기본 고객 특징**: "${desc}"\n${contextPrompt}\n### 요청사항\n1. **SPIN 단계별 대화 스크립트 작성**\n2. **각 질문의 의도 설명**`;
-                    generateContent(prompt, `'${type}' 고객 맞춤 SPIN 스크립트`);
-                });
-            });
+            // Slide 6: Final Script Generator
+            document.getElementById('final-script-generator-btn')?.addEventListener('click', () => {
+                const situation = document.getElementById('m6-situation').value;
+                if (!situation) {
+                    alert("상담 상황을 입력해주세요.");
+                    return;
+                }
+                trainingData.scriptSituation = situation;
 
-            // Slide 6: Persona Script
-            document.getElementById('persona-script-generator-btn').addEventListener('click', () => {
-                if (!trainingData.persona) { alert("M1에서 페르소나를 먼저 생성해주세요."); return; }
-                const { name, purpose, goals, pain } = trainingData.persona;
-                const prompt = `당신은 '골든듀' VVIP 상담 전문가입니다. '${name}' 고객님을 위한 맞춤형 SPIN 셀링 상담 스크립트를 작성해주세요.\n- **고객 정보**: ${JSON.stringify(trainingData.persona, null, 2)}\n이 정보를 바탕으로, 고객의 어려움을 해결하고 기대를 충족시켜줄 수 있는 SPIN 단계별 질문과 응대 멘트를 포함한 전체 대화 스크립트를 작성해주세요.`;
-                generateContent(prompt, `'${name}' 고객 맞춤형 SPIN 스크립트`);
+                let contextPrompt = "### 종합 분석 데이터\n";
+                if (trainingData.persona) contextPrompt += `- **고객 페르소나**: ${JSON.stringify(trainingData.persona, null, 2)}\n`;
+                if (trainingData.strategy) contextPrompt += `- **매장 분석**: ${JSON.stringify(trainingData.strategy, null, 2)}\n`;
+                if (trainingData.signature) contextPrompt += `- **매장 핵심 가치**: ${JSON.stringify(trainingData.signature, null, 2)}\n`;
+                contextPrompt += `- **현재 상담 상황**: ${situation}\n`;
+
+                const prompt = `당신은 '골든듀'의 VVIP 상담 전문가입니다. 아래의 종합 데이터와 구체적인 상담 상황을 바탕으로, 고객의 마음을 열고 구매까지 이어질 수 있는 이상적인 SPIN 셀링 상담 스크립트를 작성해주세요.
+
+        ${contextPrompt}
+
+        ### 스크립트 작성 요청사항
+        1.  **상황 요약**: 먼저, 주어진 모든 정보를 바탕으로 현재 상담 상황을 한 문단으로 요약해주세요.
+        2.  **스크립트 대화문**: '직원'과 '고객'의 대화체 형식으로 스크립트를 작성해주세요.
+            -   각 대사는 "직원:", "고객:"으로 시작해야 합니다.
+            -   스크립트는 **Situation(상황), Problem(문제), Implication(시사), Need-payoff(해결)**의 4단계 흐름을 자연스럽게 따라야 합니다.
+            -   이전 단계에서 분석한 고객의 '어려움(Pain Points)'과 매장의 '강점'을 대화에 녹여내세요.`;
+
+                generateContent(prompt, `맞춤형 상담 스크립트`);
             });
 
             // Slide 7: Final Report
