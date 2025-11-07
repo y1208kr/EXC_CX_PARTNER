@@ -583,7 +583,12 @@
                 // API Key is left blank.
                 const apiKey = "AIzaSyB0GwdQwPzmHqOjLh42nyZg7-YNKs9Ama0"; // Do not insert API key here.
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                const payload = { contents: [{ parts: [{ text: prompt }] }] };
+                
+                // Google Search grounding을 활성화하기 위해 payload에 'tools' 속성을 추가합니다.
+                const payload = { 
+                    contents: [{ parts: [{ text: prompt }] }],
+                    tools: [{ "google_search": {} }] // 이 부분이 추가되었습니다.
+                };
 
                 try {
                     const response = await fetch(apiUrl, {
