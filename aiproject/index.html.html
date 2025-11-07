@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>현대제철 B2B CX 솔루션 랩</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f4f7f6; /* Lighter steel gray */
+        }
+        .slide {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            display: none; /* Initially hidden */
+            flex-direction: column;
+            justify-content: space-between; /* To push nav buttons to bottom */
+            min-height: 700px;
+            border: 1px solid #dee2e6; /* Light gray border */
+        }
+        .gemini-button {
+            background-color: #004A9E; /* Hyundai Primary Blue */
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s, transform 0.2s, opacity 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .gemini-button:hover {
+            background-color: #003B7F; /* Darker Blue */
+            transform: translateY(-2px);
+        }
+        .gemini-button:disabled {
+            background-color: #6c757d;
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .nav-button {
+            background-color: #f1f1f1;
+            color: #555;
+            font-weight: bold;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #e0e0e0;
+        }
+        .nav-button:disabled {
+            background-color: #f9f9f9;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #004A9E; /* Hyundai Blue */
+            animation: spin 1s ease infinite;
+        }
+        .button-spinner {
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            border-left-color: #ffffff;
+            animation: spin 1s ease infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        header { 
+            background-color: #2c2c2c; 
+            padding: 2.5rem 1rem;
+        }
+        footer { background-color: #2c2c2c; }
+        h1, h2, h3, h4 { color: #2c2c2c; }
+        input, textarea, select {
+            background-color: #fcfcfc;
+            border-color: #ced4da; /* Gray border */
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #004A9E; /* Hyundai Blue */
+            box-shadow: 0 0 0 2px rgba(0, 74, 158, 0.2); /* Blue glow */
+        }
+        /* Progress Indicator Styles */
+        .step { position: relative; }
+        .step-circle {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background-color: #e0e0e0;
+            color: #757575;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            border: 3px solid #e0e0e0;
+        }
+        .step-label { color: #757575; font-size: 0.8rem; margin-top: 0.5rem; transition: all 0.3s ease; }
+        .step.active .step-circle { background-color: #004A9E; color: white; border-color: #004A9E;}
+        .step.active .step-label { font-weight: bold; color: #004A9E; }
+        .step.completed .step-circle { background-color: #fff; color: #004A9E; border-color: #004A9E;}
+        .step-connector { flex-grow: 1; height: 3px; background-color: #e0e0e0; }
+        .learning-objective {
+            background-color: #EBF5FF; /* Light Blue */
+            border-left: 4px solid #004A9E; /* Hyundai Blue */
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .context-box {
+            background-color: #EBF5FF; /* Light Blue */
+            border-left: 4px solid #004A9E; /* Hyundai Blue */
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.25rem;
+        }
+        /* 개조식 포맷팅을 위한 스타일 */
+        #modal-text h4 {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2c2c2c;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.25rem;
+        }
+        #modal-text ul {
+            list-style-type: disc;
+            list-style-position: outside;
+            margin-left: 1.25rem;
+            margin-bottom: 1rem;
+            space-y: 0.25rem;
+        }
+        #modal-text p {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+        #modal-text strong {
+            font-weight: 700;
+            color: #004A9E;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="text-white text-center px-4 shadow-lg relative">
+        <h1 class="text-4xl md:text-5xl font-black mb-2 text-white">현대제철 B2B CX 솔루션 랩</h1>
+        <p class="text-lg md:text-xl text-[#90CAF9]">AI와 함께 기술 서비스의 모든 순간을 디자인합니다.</p>
+        <button id="clear-data-btn" class="absolute top-4 right-4 text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow">🔄 데이터 초기화</button>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8 max-w-6xl">
+        <div id="progress-indicator" 
+             class="flex items-center w-full mb-8"
+             role="progressbar" 
+             aria-valuenow="1" 
+             aria-valuemin="1" 
+             aria-valuemax="7"
+             aria-label="학습 진행 단계">
+        </div>
+        <div id="slideshow-container" class="relative">
+            <!-- Slide 1: B2B 고객 페르소나 -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M1: B2B 고객 페르소나 정의</h2>
+                        <span class="font-bold text-gray-400">1 / 7</span>
+                    </div>
+                    <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">B2B 고객(구매팀, 연구소 등)의 복잡한 니즈를 이해하고, 이후 모든 기술 지원 및 클레임 대응의 기준점을 설정합니다.</p>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">🚙 현대제철의 핵심 고객 페르소나 정의하기</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">우리와 협업하는 고객사의 담당자(엔지니어, 구매 담당자 등) 특성을 구체적으로 입력하여 페르소나를 완성하고, AI를 통해 맞춤형 대응 전략을 얻어보세요.</p>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 w-full max-w-3xl mx-auto">
+                            <div class="space-y-4 text-sm">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="font-bold">페르소나 이름</label><input type="text" id="p1-name" class="w-full p-2 mt-1 border rounded" placeholder="예: 현대차 남양연구소 박 선임"></div>
+                                    <div><label class="font-bold">소속 / 직책</label><input type="text" id="p1-info" class="w-full p-2 mt-1 border rounded" placeholder="예: 연구개발본부 / 선임연구원"></div>
+                                </div>
+                                <div><label class="font-bold">주요 업무 및 협업 목적</label><input type="text" id="p1-purpose" class="w-full p-2 mt-1 border rounded" placeholder="예: 차세대 강판 스펙 협의, 신차 적용 테스트"></div>
+                                <div><label class="font-bold">핵심 성공 요인 (KPIs)</label><textarea id="p1-goals" class="w-full p-2 mt-1 border rounded" rows="2" placeholder="예: 목표 강성 확보, 경량화 달성, 안정적인 납기"></textarea></div>
+                                <div><label class="font-bold">주요 불만 및 어려움 (Pain Points)</label><textarea id="p1-pain" class="w-full p-2 mt-1 border rounded" rows="2" placeholder="예: 기술 데이터가 부족함, 샘플 대응이 느림, 클레임 처리가 불명확함"></textarea></div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="font-bold">주요 소통 채널</label><input type="text" id="p1-channel" class="w-full p-2 mt-1 border rounded" placeholder="예: 기술 미팅(대면), 이메일, 정기 교류회"></div>
+                                    <div><label class="font-bold">핵심 성향 (T/F, J/P)</label><input type="text" id="p1-mbti" class="w-full p-2 mt-1 border rounded" placeholder="예: T(논리중심), J(계획중시)"></div>
+                                </div>
+                                <div id="m1-validation-error" class="text-red-500 text-sm mt-2 text-center"></div>
+                                <button id="persona-generator-btn" class="gemini-button w-full mt-4">✨ AI 페르소나 분석 및 기술 대응 전략 제안</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2: 고객 경험 여정지도 (MOT) -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M2: B2B 고객 여정 지도 (MOT)</h2>
+                        <span class="font-bold text-gray-400">2 / 7</span>
+                    </div>
+                    <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">고객이 우리와 협업하는 모든 과정을 시각화하여, 기술적/운영적 병목 지점을 찾아내고 개선할 결정적 순간(MOT)을 진단합니다.</p>
+                    </div>
+                    <div id="m2-context" class="context-box hidden"></div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 id="journey-title" class="text-xl font-bold mb-4 text-center">🗺️ 작전명: 고객 경로 지뢰(Mine)를 찾아라!</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">M1 페르소나가 겪는 협업 여정을 단계별로 분석하고, '불만 지뢰(Pain Point)'와 '안전 지대(Success Point)'를 찾아보세요.</p>
+                        <div class="space-y-4 text-sm max-w-4xl mx-auto w-full">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div><label class="font-bold">① 신규 개발/샘플 단계</label><textarea id="j-step1" class="w-full p-2 mt-1 border rounded-md" rows="5" placeholder="[접점] 기술 세미나, 연구소 방문&#10;[지뢰(불만)] 원하는 스펙의 샘플이 없음&#10;[지뢰(불만)] 해외 경쟁사 데이터 부족&#10;[안전지대(만족)] 경쟁사 리포트까지 챙겨줌"></textarea></div>
+                                <div><label class="font-bold">② 양산 적용/납품 단계</label><textarea id="j-step2" class="w-full p-2 mt-1 border rounded-md" rows="5" placeholder="[접점] 발주 시스템(ERP), SCM 담당자&#10;[지뢰(불만)] 납기일정이 갑자기 변경됨&#10;[지뢰(불만)] SCM과 소통 채널 복잡&#10;[안전지대(만족)] 생산 현황을 선제적으로 공유해줌"></textarea></div>
+                                <div><label class="font-bold">③ 품질/클레임 대응 단계</label><textarea id="j-step3" class="w-full p-2 mt-1 border rounded-md" rows="5" placeholder="[접점] 품질보증팀, 기술 서비스 담당&#10;[지뢰(불만)] 클레임 원인 분석이 늦어짐&#10;[지뢰(불만)] 1차 조치가 미흡함&#10;[안전지대(만족)] 24시간 내 현장 방문 및 1차 보고서 완료"></textarea></div>
+                            </div>
+                            <div id="m2-validation-error" class="text-red-500 text-sm mt-2 text-center"></div>
+                            <button id="journey-mapper-btn" class="gemini-button w-full mt-4">✨ AI 여정 분석 및 MOT(지뢰) 개선점 제안</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: VOC 분석기 -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M3: AI 기술 클레임(VOC) 분석기</h2>
+                        <span class="font-bold text-gray-400">3 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">고객의 생생한 기술 클레임/문의(VOC) 속에 숨어있는 진짜 의도와 사실관계를 파악하고, 데이터를 기반으로 근본적인 개선 포인트를 도출합니다.</p>
+                    </div>
+                    <div id="m3-context" class="context-box hidden"></div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">🗣️ 기술 클레임에서 핵심 이슈 발견하기</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">고객이 남긴 기술 문의, 불만 메일, 클레임 리포트 등 실제 VOC를 입력하고 AI를 통해 핵심 이슈와 개선 포인트를 신속하게 파악하세요.</p>
+                        <div class="max-w-2xl mx-auto w-full">
+                            <label for="voc-input" class="font-bold text-sm">실제 기술 클레임(VOC) 내용 붙여넣기</label>
+                            <textarea id="voc-input" class="w-full p-3 mt-1 border rounded-md" rows="8" placeholder="예: &#10;“박 선임입니다. 금번 납품된 강판(HS-120)에서 표면 결함이 발생했습니다. 라인 스탑 직전이니 긴급 대응 바랍니다. 데이터 시트 첨부합니다.”&#10;“납기 일정 관련하여 SCM팀과 커뮤니케이션이 원활하지 않습니다. 담당자를 일원화해 주실 수 없을까요?”&#10;“경쟁사 대비 성형성 데이터가 부족하여 내부 보고에 어려움이 있습니다.”"></textarea>
+                            <div id="m3-validation-error" class="text-red-500 text-sm mt-2 text-center"></div>
+                            <button id="voc-analyzer-btn" class="gemini-button w-full mt-4">✨ AI VOC 분석 및 긴급/중장기 개선안 제안</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: CX 전략 만들기 (SWOT) -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M4: B2B 서비스 전략 분석 (SWOT)</h2>
+                        <span class="font-bold text-gray-400">4 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">우리 서비스팀의 강점(S), 약점(W), 기회(O), 위협(T)을 분석하여, 한정된 자원으로 최대의 기술 서비스 효과를 낼 수 있는 전략 과제의 우선순위를 결정합니다.</p>
+                    </div>
+                    <div id="m4-context" class="context-box hidden"></div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 id="strategy-title" class="text-xl font-bold mb-4 text-center">💡 데이터 기반의 차별화된 기술 서비스 전략 수립</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">이전 분석 결과와 우리 팀/경쟁사 현황을 바탕으로, 실행 가능한 서비스 개선 과제를 도출하고 우선순위를 정해보세요.</p>
+                        <div class="max-w-3xl mx-auto w-full bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-4 text-sm">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div><label class="font-bold">Strengths (강점)</label><textarea id="swot-s" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 높은 기술 이해도, 신속한 현장 대응"></textarea></div>
+                                <div><label class="font-bold">Weaknesses (약점)</label><textarea id="swot-w" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 클레임 처리 프로세스 지연, SCM과 소통 이슈"></textarea></div>
+                                <div><label class="font-bold">Opportunities (기회)</label><textarea id="swot-o" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 경쟁사 납기 이슈 발생, 전기차(EV) 신규 강종 수요 증가"></textarea></div>
+                                <div><label class="font-bold">Threats (위협)</label><textarea id="swot-t" class="w-full p-2 mt-1 border rounded-md" rows="2" placeholder="예: 중국산 저가 강판 공세, 원자재 가격 급등"></textarea></div>
+                            </div>
+                            <div>
+                                <label class="font-bold">경쟁사 및 차별점 분석</label>
+                                <textarea id="s-competitor" class="w-full p-2 mt-1 border rounded-md" rows="3" placeholder="예: A경쟁사는 가격이 저렴함, B경쟁사는 해외 네트워크가 강점. 우리는 'Total Solution (기술+품질+납기)'으로 승부."></textarea>
+                            </div>
+                            <div id="m4-validation-error" class="text-red-500 text-sm mt-2 text-center"></div>
+                            <button id="strategy-generator-btn" class="gemini-button w-full mt-4">✨ AI 서비스 과제 우선순위 분석</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: AI 기술 상담/클레임 대응 스크립트 -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M5: AI 기술 상담/클레임 대응 스크립트</h2>
+                        <span class="font-bold text-gray-400">5 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">단순 스펙 안내를 넘어 고객사의 숨겨진 니즈(Unmet Needs)를 파악하고, 기술 클레임 상황을 신뢰로 바꿀 수 있는 전문적인 응대 스크립트를 생성합니다.</p>
+                    </div>
+                    <div id="m5-context" class="context-box hidden"></div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">💬 고객의 신뢰를 얻는 기술, 전문 스크립트</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">아래에 구체적인 상담/클레임 상황을 입력하고, 이전 단계의 분석 결과를 모두 종합한 최적의 응대 스크립트를 생성해보세요.</p>
+                        <div class="max-w-3xl mx-auto w-full bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-4 text-sm">
+                            <div>
+                                <label class="font-bold">상담 또는 클레임 상황을 구체적으로 입력해주세요</label>
+                                <textarea id="m5-situation" class="w-full p-2 mt-1 border rounded-md" rows="5" placeholder="예: (클레임 상황) 현대차 박 선임이 표면 결함으로 긴급 클레임을 제기함. 매우 화가 난 상태.&#10;예: (기술 상담 상황) 기아 EV 프로젝트 담당자가 경량화를 위한 신규 강종을 문의함. 예산에 민감함."></textarea>
+                            </div>
+                            <div id="m5-validation-error" class="text-red-500 text-sm mt-2 text-center"></div>
+                            <button id="m5-script-btn" class="gemini-button w-full mt-4">✨ AI 맞춤형 응대 스크립트 생성</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: 실전 롤플레이 시뮬레이션 -->
+            <div class="slide">
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M6: 실전 롤플레이 시뮬레이션</h2>
+                        <span class="font-bold text-gray-400">6 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">생성된 스크립트와 페르소나를 기반으로 실전과 같은 롤플레이를 수행하고, 동료/강사의 피드백을 통해 자신의 대응 방식을 객관적으로 점검하고 개선합니다.</p>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">🎬 현장 상황을 가정한 실전 대응 훈련</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">M1, M3, M5에서 도출한 '페르소나', '클레임 상황', 'AI 스크립트'를 바탕으로 실전 롤플레이를 진행합니다.</p>
+                        <div class="max-w-3xl mx-auto w-full text-sm space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-50 border rounded-lg p-4">
+                                    <h4 class="font-bold mb-2 text-gray-800">ROLE 1: 고객 (페르소나)</h4>
+                                    <p class="text-xs mb-1">M1/M3의 페르소나/VOC 참고</p>
+                                    <ul id="m6-role-customer" class="list-disc list-inside text-gray-700 space-y-1 text-xs">
+                                        <!-- JS will populate this -->
+                                    </ul>
+                                </div>
+                                <div class="bg-gray-50 border rounded-lg p-4">
+                                    <h4 class="font-bold mb-2 text-gray-800">ROLE 2: 현대제철 담당자</h4>
+                                    <p class="text-xs mb-1">M5의 스크립트 참고</p>
+                                    <ul id="m6-role-agent" class="list-disc list-inside text-gray-700 space-y-1 text-xs">
+                                        <!-- JS will populate this -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                                <h4 class="font-bold text-blue-800">실행 가이드</h4>
+                                <p class="mt-2">1. 2인 1조로 역할을 배정합니다. (고객 vs 담당자)</p>
+                                <p class="mt-1">2. 5분간 롤플레이를 진행하고, 조원은 스마트폰으로 <strong class="text-blue-700">과정을 촬영</strong>합니다.</p>
+                                <p class="mt-1">3. 촬영된 영상을 함께 리뷰하며 <strong class="text-blue-700">동료 피드백</strong>을 진행합니다.</p>
+                            </div>
+                            <button id="goto-summary-btn" class="gemini-button w-full mt-4">✨ 모든 훈련 완료! 최종 요약 보러가기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: 최종 요약 및 정리 -->
+            <div class="slide">
+                 <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">M7: 최종 요약 및 액션 플랜</h2>
+                        <span class="font-bold text-gray-400">7 / 7</span>
+                    </div>
+                     <div class="learning-objective">
+                        <p class="font-bold text-sm">💡 오늘의 학습 목표</p>
+                        <p class="text-xs text-gray-600">모든 학습 과정을 복습하고 AI의 최종 제언을 통해, 우리 팀/개인이 현업에서 즉시 실행할 수 있는 구체적인 액션 플랜을 수립합니다.</p>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-xl font-bold mb-4 text-center">📋 B2B CX 솔루션 랩: 결과 보고서</h3>
+                        <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">지금까지 진행한 모든 모듈의 결과입니다. 아래 버튼을 눌러 AI의 최종 종합 분석을 받아보세요.</p>
+                        <div id="summary-content" class="flex-grow overflow-y-auto p-4 bg-gray-100 rounded-lg border max-h-[400px] space-y-6">
+                            <!-- Summary sections will be populated by JS -->
+                        </div>
+                        <div id="m7-validation-error" class="text-red-500 text-sm mt-2 text-center"></div>
+                        <button id="final-report-btn" class="gemini-button w-full mt-6">✨ AI 종합 분석 및 최종 제언 받기</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Navigation buttons container -->
+        <div id="navigation-container" class="flex justify-between items-center mt-8">
+            <button id="prev-btn" class="nav-button">❮ 이전 단계로</button>
+            <button id="next-btn" class="nav-button">다음 단계로 ❯</button>
+        </div>
+    </main>
+
+    <!-- Gemini Modal -->
+    <div id="gemini-modal" 
+         class="fixed inset-0 bg-gray-800 bg-opacity-60 overflow-y-auto h-full w-full hidden z-50 flex items-center justify-center p-4"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="modal-title">
+        <div class="relative mx-auto p-5 border w-full max-w-3xl shadow-lg rounded-xl bg-white">
+            <div class="mt-3">
+                <div class="flex justify-between items-center mb-4 pb-3 border-b">
+                    <h3 id="modal-title" class="text-lg leading-6 font-bold text-gray-900">✨ AI 생성 결과</h3>
+                    <button id="close-modal-button" class="text-gray-400 hover:text-gray-600 text-3xl font-light">&times;</button>
+                </div>
+                <div id="modal-content" class="mt-2 px-2 py-3 max-h-[60vh] overflow-y-auto">
+                    <div id="modal-loader" class="flex justify-center items-center py-10">
+                        <div class="spinner"></div>
+                        <p class="ml-4 text-gray-600">AI가 분석 중입니다. 잠시만 기다려주세요...</p>
+                    </div>
+                    <div id="modal-text" class="text-sm text-gray-700 text-left whitespace-pre-wrap leading-relaxed"></div>
+                </div>
+                <!-- 'classs' typo fixed to 'class' -->
+                <div class="flex justify-end items-center px-4 py-3 mt-4 border-t bg-gray-50 rounded-b-xl">
+                    <span id="copy-success" class="text-sm text-green-600 mr-4 hidden">복사 완료!</span>
+                    <button id="regenerate-button" class="gemini-button text-sm mr-2">✨ 다시 생성</button>
+                    <button id="copy-button" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 text-sm">내용 복사</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="text-white text-center py-6 px-4 mt-12">
+        <p class="text-sm text-gray-400">&copy; 2025 Hyundai Steel B2B CX Solution Program. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- 1. DATA STORAGE ---
+            const STORAGE_KEY = 'hyundai_steel_cx_lab_data';
+            let trainingData = { 
+                modulesCompleted: new Set() 
+            };
+            
+            // --- 2. MODULE & SLIDE DEFINITIONS ---
+            const moduleTitles = ["페르소나", "고객 여정(MOT)", "클레임(VOC) 분석", "SWOT 전략", "AI 스크립트", "실전 롤플레이", "최종 요약"];
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const progressIndicator = document.getElementById('progress-indicator');
+            let currentSlide = 0;
+
+            // --- 3. UTILITY FUNCTIONS ---
+            
+            /**
+             * Debounce function to limit execution rate.
+             * @param {Function} func Function to debounce
+             * @param {number} wait Wait time in ms
+             * @returns {Function} Debounced function
+             */
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            /**
+             * Validates input fields.
+             * @param {string} value - The value to validate
+             * @param {string} fieldName - The user-facing name of the field
+             * @param {number} [minLength=5] - The minimum required length
+             * @returns {boolean} - True if valid, false otherwise
+             */
+            function validateInput(value, fieldName, slideId, minLength = 5) {
+                const errorDiv = document.getElementById(`m${slideId}-validation-error`);
+                if (!errorDiv) return true; // Failsafe
+
+                if (!value || value.trim().length === 0) {
+                    errorDiv.textContent = `❌ ${fieldName}을(를) 입력해주세요.`;
+                    return false;
+                }
+                if (value.trim().length < minLength) {
+                    errorDiv.textContent = `❌ ${fieldName}은(는) 최소 ${minLength}자 이상 입력해야 합니다.`;
+                    return false;
+                }
+                errorDiv.textContent = '';
+                return true;
+            }
+
+            /**
+             * Clears all validation errors for a slide.
+             * @param {string} slideId - The slide number (e.g., '1', '2')
+             */
+            function clearValidationError(slideId) {
+                const errorDiv = document.getElementById(`m${slideId}-validation-error`);
+                if (errorDiv) errorDiv.textContent = '';
+            }
+
+            /**
+             * Sets the loading state for a button.
+             * @param {string} buttonId - The ID of the button
+             * @param {boolean} isLoading - True to show loading, false to restore
+             */
+            function setButtonLoading(buttonId, isLoading) {
+                const button = document.getElementById(buttonId);
+                if (!button) return;
+
+                if (isLoading) {
+                    button.disabled = true;
+                    button.dataset.originalText = button.innerHTML;
+                    button.innerHTML = '<span class="button-spinner"></span>분석 중...';
+                } else {
+                    button.disabled = false;
+                    button.innerHTML = button.dataset.originalText;
+                }
+            }
+            
+            // --- 4. DATA PERSISTENCE (LocalStorage) ---
+
+            /**
+             * Saves the current trainingData to localStorage.
+             */
+            function saveTrainingData() {
+                try {
+                    // Update trainingData from all fields before saving
+                    // This ensures even non-module-switching changes are captured
+                    if (trainingData.persona) {
+                        trainingData.persona.name = document.getElementById('p1-name').value;
+                        trainingData.persona.info = document.getElementById('p1-info').value;
+                        trainingData.persona.purpose = document.getElementById('p1-purpose').value;
+                        trainingData.persona.goals = document.getElementById('p1-goals').value;
+                        trainingData.persona.pain = document.getElementById('p1-pain').value;
+                        trainingData.persona.channel = document.getElementById('p1-channel').value;
+                        trainingData.persona.mbti = document.getElementById('p1-mbti').value;
+                    }
+                    if (trainingData.journey) {
+                        trainingData.journey.step1 = document.getElementById('j-step1').value;
+                        trainingData.journey.step2 = document.getElementById('j-step2').value;
+                        trainingData.journey.step3 = document.getElementById('j-step3').value;
+                    }
+                    trainingData.vocInput = document.getElementById('voc-input').value;
+                    if (trainingData.strategy) {
+                         trainingData.strategy.swot_s = document.getElementById('swot-s').value;
+                         trainingData.strategy.swot_w = document.getElementById('swot-w').value;
+                         trainingData.strategy.swot_o = document.getElementById('swot-o').value;
+                         trainingData.strategy.swot_t = document.getElementById('swot-t').value;
+                         trainingData.strategy.competitor = document.getElementById('s-competitor').value;
+                    }
+                    trainingData.scriptSituation = document.getElementById('m5-situation').value;
+
+                    const dataToSave = {
+                        ...trainingData,
+                        modulesCompleted: Array.from(trainingData.modulesCompleted)
+                    };
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+                } catch (e) {
+                    console.error('데이터 저장 실패:', e);
+                }
+            }
+
+            /**
+             * Loads and populates trainingData from localStorage.
+             * @returns {boolean} - True if data was loaded, false otherwise
+             */
+            function loadTrainingData() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        Object.assign(trainingData, parsed); // Load all data
+                        trainingData.modulesCompleted = new Set(parsed.modulesCompleted || []);
+
+                        // Restore UI fields from loaded data
+                        if (trainingData.persona) {
+                            document.getElementById('p1-name').value = trainingData.persona.name || '';
+                            document.getElementById('p1-info').value = trainingData.persona.info || '';
+                            document.getElementById('p1-purpose').value = trainingData.persona.purpose || '';
+                            document.getElementById('p1-goals').value = trainingData.persona.goals || '';
+                            document.getElementById('p1-pain').value = trainingData.persona.pain || '';
+                            document.getElementById('p1-channel').value = trainingData.persona.channel || '';
+                            document.getElementById('p1-mbti').value = trainingData.persona.mbti || '';
+                        }
+                        if (trainingData.journey) {
+                            document.getElementById('j-step1').value = trainingData.journey.step1 || '';
+                            document.getElementById('j-step2').value = trainingData.journey.step2 || '';
+                            document.getElementById('j-step3').value = trainingData.journey.step3 || '';
+                        }
+                        document.getElementById('voc-input').value = trainingData.vocInput || '';
+                        if (trainingData.strategy) {
+                            document.getElementById('swot-s').value = trainingData.strategy.swot_s || '';
+                            document.getElementById('swot-w').value = trainingData.strategy.swot_w || '';
+                            document.getElementById('swot-o').value = trainingData.strategy.swot_o || '';
+                            document.getElementById('swot-t').value = trainingData.strategy.swot_t || '';
+                            document.getElementById('s-competitor').value = trainingData.strategy.competitor || '';
+                        }
+                        document.getElementById('m5-situation').value = trainingData.scriptSituation || '';
+                        
+                        return true;
+                    }
+                } catch (e) {
+                    console.error('데이터 로드 실패:', e);
+                    localStorage.removeItem(STORAGE_KEY); // Clear corrupted data
+                }
+                return false;
+            }
+
+            /**
+             * Clears all data from localStorage and reloads.
+             */
+            function clearTrainingData() {
+                if (confirm('⚠️ 모든 학습 데이터를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                    localStorage.removeItem(STORAGE_KEY);
+                    location.reload();
+                }
+            }
+
+            // --- 5. PROGRESS BAR & SLIDE NAVIGATION ---
+            function setupProgressIndicator() {
+                progressIndicator.innerHTML = '';
+                moduleTitles.forEach((title, index) => {
+                    const step = document.createElement('div');
+                    step.className = 'step flex flex-col items-center text-center flex-1';
+                    step.innerHTML = `<span class="step-circle">${index + 1}</span><span class="step-label">${title}</span>`;
+                    progressIndicator.appendChild(step);
+
+                    if (index < moduleTitles.length - 1) {
+                        const connector = document.createElement('div');
+                        connector.className = 'step-connector';
+                        progressIndicator.appendChild(connector);
+                    }
+                });
+            }
+
+            function updateProgressIndicator() {
+                const steps = progressIndicator.querySelectorAll('.step');
+                steps.forEach((step, i) => {
+                    step.classList.remove('active', 'completed');
+                    if (i === currentSlide) {
+                        step.classList.add('active');
+                        step.setAttribute('aria-current', 'step');
+                    } else if (trainingData.modulesCompleted.has(i)) {
+                        step.classList.add('completed');
+                        step.querySelector('.step-circle').innerHTML = '✓';
+                        step.removeAttribute('aria-current');
+                    } else {
+                        step.querySelector('.step-circle').innerHTML = i + 1;
+                        step.removeAttribute('aria-current');
+                    }
+                });
+                progressIndicator.setAttribute('aria-valuenow', currentSlide + 1);
+            }
+            
+            // --- 6. CONTEXTUAL DATA PIPELINE ---
+            function updateContextualData(index) {
+                const contextBoxes = [
+                    null, // M1
+                    document.getElementById('m2-context'),
+                    document.getElementById('m3-context'),
+                    document.getElementById('m4-context'),
+                    document.getElementById('m5-context'),
+                    null, // M6
+                    null  // M7
+                ];
+                
+                contextBoxes.forEach(box => box?.classList.add('hidden'));
+
+                if(index > 0 && index < 5) { // Only for slides M2, M3, M4, M5
+                    const box = contextBoxes[index];
+                    let html = '';
+                    let hasContext = false;
+                    switch(index) {
+                        case 1: // M2 (Journey)
+                            if (trainingData.persona?.name) {
+                                html = `<p class="font-bold text-sm">M1 결과 불러오기: '${trainingData.persona.name}' 페르소나</p>
+                                        <p class="text-xs mt-1"><strong>주요 어려움(Pain Point):</strong> ${trainingData.persona.pain || 'N/A'}</p>`;
+                                hasContext = true;
+                            }
+                            break;
+                        case 2: // M3 (VOC)
+                            if (trainingData.persona?.name) {
+                                html = `<p class="font-bold text-sm">CONTEXT: '${trainingData.persona.name}' 고객과 같은 분들이 남겼을 VOC를 상상하며 분석해보세요.</p>`;
+                                hasContext = true;
+                            }
+                            break;
+                        case 3: // M4 (SWOT)
+                            html = '<p class="font-bold text-sm">CONTEXT: 이전 단계 분석 결과 불러오기</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
+                            if (trainingData.persona?.pain) { html += `<li><strong>페르소나 핵심 니즈:</strong> ${trainingData.persona.pain}</li>`; hasContext = true; }
+                            if (trainingData.journey?.step1) { html += `<li><strong>여정 지도 개선점:</strong> '${trainingData.journey.step1.substring(0, 20)}...' 개선 필요</li>`; hasContext = true; }
+                            if (trainingData.vocInput) { html += `<li><strong>VOC 입력됨:</strong> "${trainingData.vocInput.substring(0,30)}..."</li>`; hasContext = true; }
+                            if (!hasContext) { html = '<li>이전 단계의 데이터가 없습니다.</li>'; }
+                            html += '</ul>';
+                            hasContext = true;
+                            break;
+                        case 4: // M5 (Script)
+                            html = '<p class="font-bold text-sm">M1~M4 핵심 결과 불러오기</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
+                            if (trainingData.persona?.name) { html += `<li><strong>M1 페르소나:</strong> ${trainingData.persona.name} (${trainingData.persona.pain}, ${trainingData.persona.mbti || ''})</li>`; hasContext = true; }
+                            if (trainingData.journey?.step1) { html += `<li><strong>M2 MOT(지뢰):</strong> '${trainingData.journey.step1.substring(0, 20)}...' 개선 필요</li>`; hasContext = true; }
+                            if (trainingData.vocInput) { html += `<li><strong>M3 클레임:</strong> "${trainingData.vocInput.substring(0, 25)}..."</li>`; hasContext = true; }
+                            if (trainingData.strategy?.swot_s) { html += `<li><strong>M4 우리팀 강점:</strong> ${trainingData.strategy.swot_s}</li>`; hasContext = true; }
+                            if (!hasContext) { html = '<p class="font-bold text-sm">이전 단계 데이터가 없습니다.</p>'; }
+                            html += '</ul>';
+                            hasContext = true;
+                            break;
+                    }
+                    if(hasContext) {
+                        box.innerHTML = html;
+                        box.classList.remove('hidden');
+                    }
+                }
+            }
+            
+            // --- 7. SLIDE DISPLAY LOGIC ---
+            function showSlide(index) {
+                slides.forEach((slide) => {
+                    slide.style.display = 'none';
+                });
+                slides[index].style.display = 'flex';
+                
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === slides.length - 1;
+
+                updateProgressIndicator();
+                updateContextualData(index);
+
+                if (index === 5) { // M6: Roleplay slide
+                    const customerRole = document.getElementById('m6-role-customer');
+                    const agentRole = document.getElementById('m6-role-agent');
+                    
+                    let customerHtml = `<li><strong>고객 페르소나:</strong> ${trainingData.persona?.name || 'M1에서 정의'} (${trainingData.persona?.mbti || 'T/F'})</li>
+                                      <li><strong>클레임 상황:</strong> ${trainingData.scriptSituation || (trainingData.vocInput?.substring(0, 40) + '...' || 'M3/M5에서 정의')}</li>
+                                      <li><strong>핵심 감정:</strong> ${trainingData.persona?.pain || 'M1에서 정의'}</li>`;
+                    
+                    let agentHtml = `<li><strong>대응 목표:</strong> 신뢰 회복, 1차 조치 제안</li>
+                                     <li><strong>핵심 스크립트:</strong> ${trainingData.scriptSituation ? 'M5 스크립트 참고' : 'M5에서 생성'}</li>
+                                     <li><strong>Must-Do Action:</strong> (예: 2시간 내 방문 약속)</li>`;
+                                     
+                    customerRole.innerHTML = customerHtml;
+                    agentRole.innerHTML = agentHtml;
+                }
+
+                if (index === slides.length - 1) { // M7: Summary slide
+                    populateSummaryPage();
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    trainingData.modulesCompleted.add(currentSlide);
+                    currentSlide++;
+                    showSlide(currentSlide);
+                    saveTrainingData(); // Save progress when moving
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+            
+            document.getElementById('goto-summary-btn')?.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    trainingData.modulesCompleted.add(currentSlide);
+                    currentSlide++;
+                    showSlide(currentSlide);
+                    saveTrainingData();
+                }
+            });
+            
+            // --- 8. SUMMARY PAGE LOGIC ---
+            function populateSummaryPage() {
+                const summaryContainer = document.getElementById('summary-content');
+                let content = '';
+                
+                const modules = [
+                    { title: 'M1: B2B 고객 페르소나', data: trainingData.persona, fields: {name: '이름', info: '소속/직책', purpose: '협업 목적', pain: '주요 어려움', mbti: '핵심 성향'} },
+                    { title: 'M2: B2B 고객 여정 (MOT)', data: trainingData.journey, fields: {step1: '개발/샘플', step2: '양산/납품', step3: '품질/클레임'} },
+                    { title: 'M3: 기술 클레임(VOC) 분석', data: trainingData, fields: {vocInput: '입력된 VOC'} },
+                    { title: 'M4: B2B 서비스 전략 (SWOT)', data: trainingData.strategy, fields: {swot_s: '강점', swot_w: '약점', swot_o: '기회', swot_t: '위협', competitor: '경쟁사 분석'} },
+                    { title: 'M5: AI 응대 스크립트', data: trainingData, fields: {scriptSituation: '입력된 상황'} }
+                ];
+
+                modules.forEach(module => {
+                    content += `<div class="p-4 bg-white rounded-lg shadow-sm"><h4 class="font-bold text-base mb-2 text-gray-800">${module.title}</h4>`;
+                    let hasData = module.data && Object.keys(module.fields).some(field => module.data[field]);
+                    
+                    if (hasData) {
+                        content += '<div class="text-sm space-y-1 text-gray-600">';
+                        for (const [field, label] of Object.entries(module.fields)) {
+                             if(module.data[field]) {
+                                 content += `<p class="whitespace-pre-wrap"><strong>${label}:</strong> ${module.data[field]}</p>`;
+                             }
+                        }
+                        content += '</div>';
+                    } else {
+                        content += '<p class="text-sm text-gray-500">아직 데이터가 없습니다.</p>';
+                    }
+                    content += '</div>';
+                });
+                
+                summaryContainer.innerHTML = content;
+            }
+            
+            // --- 9. MODAL & API CALL LOGIC ---
+            const modal = document.getElementById('gemini-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalLoader = document.getElementById('modal-loader');
+            const modalText = document.getElementById('modal-text');
+            const closeModalButton = document.getElementById('close-modal-button');
+            const regenerateButton = document.getElementById('regenerate-button');
+            const copyButton = document.getElementById('copy-button');
+            const copySuccessMessage = document.getElementById('copy-success');
+
+            let lastPrompt = ''; // For re-generation
+
+            const openModal = () => {
+                 modal.classList.remove('hidden');
+                 modal.setAttribute('aria-hidden', 'false');
+                 closeModalButton.focus();
+            };
+            const closeModal = () => {
+                modal.classList.add('hidden');
+                modal.setAttribute('aria-hidden', 'true');
+            };
+
+            closeModalButton.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            /**
+             * Formats the raw model output text into structured HTML.
+             * @param {string} text - Raw text from the API
+             * @returns {string} - Formatted HTML
+             */
+            function formatResponse(text) {
+                let html = text.trim();
+                
+                // 1. Convert headers (e.g., #, ##, 1. **, 2. **)
+                html = html.replace(/^(#+)\s*(.*?)($|\r\n|\r|\n)/gm, '<h4 class="font-bold text-base text-gray-900 mt-4 mb-2">$2</h4>');
+                html = html.replace(/^[0-9]+\.\s*\*\*(.*?)\*\*[:\s]*($|\r\n|\r|\n)/gm, '<h4 class="font-bold text-base text-gray-900 mt-4 mb-2">$1</h4>');
+                html = html.replace(/^\*\*(.*?)\*\*[:\s]*($|\r\n|\r|\n)/gm, '<h4 class="font-bold text-base text-gray-900 mt-4 mb-2">$1</h4>');
+
+                // 2. Convert bolding
+                html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>');
+                
+                // 3. Convert list items (* or -)
+                html = html.replace(/((?:^[ \t]*[\*\-]\s+.*(?:\r\n|\r|\n)?)+)/gm, (match) => {
+                    let listItems = match.replace(/^[ \t]*[\*\-]\s+(.*)$/gm, '<li>$1</li>');
+                    return '<ul class="list-disc list-outside ml-5 space-y-1">' + listItems.trim() + '</ul>';
+                });
+
+                // 4. Convert paragraphs
+                html = html.split(/(?:\r\n|\r|\n){2,}/)
+                           .map(paragraph => {
+                               let trimmed = paragraph.trim();
+                               if (trimmed.startsWith('<h4') || trimmed.startsWith('<ul') || trimmed.length === 0) {
+                                   return trimmed; 
+                               }
+                               return '<p class="mb-2">' + trimmed.replace(/(?:\r\n|\r|\n)/g, '<br>') + '</p>';
+                           })
+                           .join('');
+
+                // 5. Clean up
+                html = html.replace(/<p class="mb-2"><\/p>/g, '');
+                html = html.replace(/<br>\s*<br>/g, '<br>');
+
+                return html;
+            }
+
+            /**
+             * Main function to open modal and call API.
+             * @param {string} prompt - The prompt to send to the API
+             * @param {string} title - The title for the modal
+             * @param {string} buttonId - The ID of the button that triggered this
+             */
+            async function generateContent(prompt, title, buttonId) {
+                lastPrompt = prompt;
+                modalTitle.textContent = title;
+                modalText.innerHTML = '';
+                modalLoader.style.display = 'flex';
+                copySuccessMessage.classList.add('hidden');
+                openModal();
+                
+                if (buttonId) setButtonLoading(buttonId, true);
+                
+                let errorText = null;
+                
+                try {
+                    // [수정] API 키를 직접 호출하는 대신, 우리 서버의 '프록시' 엔드포인트를 호출합니다.
+                    // 이 '/api/generateContent'는 깃허브와 연동된 Vercel/Netlify 등에 생성해야 합니다.
+                    const apiUrl = '/api/generateContent';
+                    
+                    const payload = { 
+                        prompt: prompt 
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        // Handle HTTP errors
+                        let errorMsg = `프록시 서버 오류: ${response.status}`;
+                        if (response.status === 429) {
+                            errorMsg = "⚠️ API 요청 한도를 초과했습니다. 잠시 후 다시 시도해 주세요.";
+                        } else if (response.status === 401 || response.status === 403) {
+                            errorMsg = "⚠️ API 인증에 문제가 발생했습니다. 관리자에게 문의해 주세요.";
+                        } else if (response.status === 500) {
+                             errorMsg = "⚠️ 서버(프록시) 내부 오류가 발생했습니다. 관리자에게 문의하세요.";
+                        } else {
+                            try {
+                                const errData = await response.json();
+                                errorMsg = `⚠️ 오류 (${response.status}): ${errData.error || '알 수 없는 오류'}`;
+                            } catch (e) { /* ignore */ }
+                        }
+                        throw new Error(errorMsg);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    // Validate API response structure
+                    const text = result.text; // 프록시 서버가 { text: "..." } 형태로 반환한다고 가정
+                    if (!text) {
+                        throw new Error("프록시 서버의 응답 형식이 올바르지 않습니다.");
+                    }
+
+                    modalText.innerHTML = formatResponse(text);
+
+                } catch (error) {
+                    console.error("API call failed:", error);
+                    // Do not log retries to console
+                    errorText = error.message || "오류가 발생했습니다. 네트워크 연결을 확인하거나 잠시 후 다시 시도해 주세요.";
+                } finally {
+                    if (buttonId) setButtonLoading(buttonId, false);
+                    modalLoader.style.display = 'none';
+                    if (errorText) {
+                        modalText.innerHTML = `<p class="text-red-600 font-bold text-center p-4">${errorText}</p>`;
+                    }
+                }
+            }
+            
+            regenerateButton.addEventListener('click', () => {
+                if (lastPrompt) {
+                    // Find which button was the last one
+                    const buttonId = document.querySelector('button[disabled][data-original-text]')?.id;
+                    generateContent(lastPrompt, modalTitle.textContent, buttonId);
+                }
+            });
+
+            copyButton.addEventListener('click', () => {
+                const textToCopy = modalText.innerText;
+                try {
+                    const tempTextarea = document.createElement('textarea');
+                    tempTextarea.value = textToCopy;
+                    document.body.appendChild(tempTextarea);
+                    tempTextarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempTextarea);
+                    
+                    copySuccessMessage.classList.remove('hidden');
+                    setTimeout(() => copySuccessMessage.classList.add('hidden'), 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                }
+            });
+            
+            // --- 10. PROMPT TEMPLATES ---
+            
+            // [수정] 테이블 출력을 금지하고 개조식 출력을 강제하는 기본 제약 조건
+            const baseConstraints = `
+# 제약 조건
+- 출력 형식(개조식)을 반드시 준수할 것.
+- 절대로 마크다운 테이블(|)을 사용하지 말 것.
+- 모든 제안은 구조화된 리스트(예: 1. 항목, - 세부 항목)로 제공할 것.`;
+
+            const promptTemplates = {
+                persona: (data) => `당신은 '현대제철' B2B CX 컨설턴트입니다.
+# 역할 및 목표
+B2B 고객 페르소나를 심층 분석하고, 기술 서비스 대응 전략을 수립합니다.
+
+# 입력 데이터
+- 이름/소속: ${data.name} (${data.info})
+- 주요 업무: ${data.purpose}
+- KPI: ${data.goals}
+- Pain Points: ${data.pain}
+- 소통 채널: ${data.channel}
+- MBTI 성향: ${data.mbti}
+
+# 출력 형식 (반드시 준수)
+## 1. 페르소나 심층 분석
+- **감정 상태**: [분석 내용]
+- **숨겨진 니즈**: [분석 내용]
+- **의사결정 스타일** (${data.mbti} 기반): [분석 내용]
+
+## 2. 맞춤형 기술 지원 전략
+### 전략 1: [전략명]
+- **실행 방안**: [구체적 행동]
+- **기대 효과**: [효과]
+### 전략 2: [전략명]
+- **실행 방안**: [구체적 행동]
+- **기대 효과**: [효과]
+### 전략 3: [전략명]
+- **실행 방안**: [구체적 행동]
+- **기대 효과**: [효과]
+
+${baseConstraints}
+- ${data.mbti} 성향을 반드시 고려
+- 현대제철의 B2B 기술 서비스 맥락에 적합해야 함`,
+                
+                journey: (data, persona) => `당신은 '현대제철' CX 디자이너입니다.
+# 역할 및 목표
+B2B 고객 여정 지도를 분석하여, 단계별 '불만 지뢰(Pain Point)'를 명확히 진단하고, '안전 지대(Success Point)'로 바꿀 MOT 개선 아이디어를 제안합니다.
+${persona ? `\n# 컨텍스트\n- M1의 '${persona.name}' 페르소나 여정이라고 가정.` : ''}
+
+# B2B 고객 여정 지도
+- **개발/샘플**: ${data.step1}
+- **양산/납품**: ${data.step2}
+- **품질/클레임**: ${data.step3}
+
+# 출력 형식 (반드시 준수)
+## 1. 핵심 '지뢰'(Pain Point) 진단
+- **개발/샘플 단계**: [진단 내용]
+- **양산/납품 단계**: [진단 내용]
+- **품질/클레임 단계**: [진단 내용]
+
+## 2. MOT 개선 아이디어 (Top 3)
+### 아이디어 1: [아이디어명]
+- **개선 대상**: [예: 개발/샘플 단계의 데이터 부족 지뢰]
+- **실행 방안**: [구체적 방안]
+- **기대 효과**: [효과]
+### 아이디어 2: [아이디어명]
+- **개선 대상**: [개선 대상]
+- **실행 방안**: [구체적 방안]
+- **기대 효과**: [효과]
+### 아이디어 3: [아이디어명]
+- **개선 대상**: [개선 대상]
+- **실행 방안**: [구체적 방안]
+- **기대 효과**: [효과]
+
+${baseConstraints}`,
+
+                voc: (data) => `당신은 '현대제철'의 베테랑 품질 관리(QC) 및 기술 서비스 전문가입니다.
+# 역할 및 목표
+아래 기술 클레임(VOC) 내용을 분석하여 체계적으로 정리하고, 실행 가능한 개선 방안을 제안합니다.
+
+# 고객 기술 클레임(VOC) 원문
+${data}
+
+# 출력 형식 (반드시 준수)
+## 1. VOC 요약 및 긴급도
+- **요약**: [한 문장 요약]
+- **긴급도**: [High/Mid/Low 중 택1 및 이유]
+
+## 2. 관련 부서 식별
+- [예: 기술, 품질, SCM, 영업 등]
+
+## 3. 고객 핵심 니즈 및 근본 원인(RCA) 추론
+- **고객 니즈**: [고객의 진짜 요구사항]
+- **근본 원인**: [추론된 문제의 근본 원인]
+
+## 4. Action Item 제안
+- **단기 긴급조치**: [즉시 실행할 행동 1], [행동 2]
+- **중장기 재발방지**: [프로세스/시스템 개선 방안 1], [방안 2]
+
+${baseConstraints}`,
+                
+                strategy: (data, context) => `당신은 '현대제철' 기술 서비스 전략가입니다.
+# 역할 및 목표
+아래 데이터를 바탕으로, 우리 팀이 실행 가능한 서비스 개선 과제를 도출하고 우선순위를 정합니다.
+
+# 종합 컨텍스트
+${context}
+
+# 우리 팀 SWOT 및 경쟁사 분석
+${JSON.stringify(data, null, 2)}
+
+# 출력 형식 (반드시 준수)
+## 1. 서비스 개선 과제 (Top 5)
+- **과제 1**: [과제 내용]
+- **과제 2**: [과제 내용]
+- **과제 3**: [과제 내용]
+- **과제 4**: [과제 내용]
+- **과제 5**: [과제 내용]
+
+## 2. 과제 우선순위 평가 (ICE 프레임워크)
+- **과제 1**: (Impact: [상/중/하], Confidence: [상/중/하], Ease: [상/중/하])
+- **과제 2**: (Impact: [상/중/하], Confidence: [상/중/하], Ease: [상/중/하])
+- **과제 3**: (Impact: [상/중/하], Confidence: [상/중/하], Ease: [상/중/하])
+
+## 3. 1순위 핵심 과제 및 실행 이유
+- **1순위 과제**: [선정된 1순위 과제명]
+- **선정 이유**: [선정 이유]
+
+${baseConstraints}`,
+                
+                script: (data, context) => `당신은 '현대제철'의 최고 기술 영업 및 클레임 대응 전문가(ACE)입니다.
+# 역할 및 목표
+아래의 종합 데이터와 구체적인 상담/클레임 상황을 바탕으로, 고객을 안심시키고 신뢰를 구축할 수 있는 이상적인 응대 스크립트를 작성합니다. (특히 고객 페르소나의 '핵심 성향(T/F, J/P)'을 반드시 반영)
+
+# 종합 컨텍스트
+${context}
+- **현재 상담/클레임 상황**: ${data}
+
+# 출력 형식 (반드시 준수)
+## 1. 상황 요약 및 대응 목표
+- **상황 진단**: [현재 상황 요약]
+- **고객 성향**: [페르소나 기반 성향 분석]
+- **대응 목표**: [예: 고객 감정 진정, 1차 조치 제안, 신뢰 회복]
+
+## 2. 맞춤형 응대 스크립트 (4단계)
+### 1단계: 공감 및 경청
+- **직원**: [멘트]
+### 2단계: 사실 확인 및 질문
+- **직원**: [멘트]
+- **고객**: [예상 답변]
+### 3단계: 1차 해결책 제시
+- **직원**: [멘트]
+### 4단계: 향후 계획 및 신뢰 구축
+- **직원**: [멘트]
+
+## 3. 상황별 'Must-Do Action'
+- [예: 2시간 내 현장 방문 약속, 유관부서(품질) 즉시 알림]
+
+${baseConstraints}`,
+
+                finalReport: (data) => `당신은 '현대제철'의 수석 B2B CX 컨설턴트입니다.
+# 역할 및 목표
+아래 워크샵 결과 데이터를 종합 분석하여, 서비스팀이 실행할 최종 전략과 액션 플랜을 담은 보고서를 작성합니다.
+
+# 워크샵 종합 데이터
+- **M1 페르소나**: ${JSON.stringify(data.persona, null, 2)}
+- **M2 고객 여정(MOT)**: ${JSON.stringify(data.journey, null, 2)}
+- **M3 클레임(VOC)**: ${data.vocInput || "입력되지 않음"}
+- **M4 SWOT**: ${JSON.stringify(data.strategy, null, 2)}
+- **M5 스크립트 상황**: ${data.scriptSituation || "입력되지 않음"}
+
+# 출력 형식 (반드시 준수)
+## 1. 현황 진단 (요약)
+- [수집된 모든 데이터를 바탕으로 이 서비스팀의 CX 현주소를 한 문단으로 요약 진단 (강점과 시급한 '지뢰' 포함)]
+
+## 2. 핵심 전략 방향
+- **방향 1**: [가장 중요한 전략 방향 1]
+- **방향 2**: [두 번째로 중요한 전략 방향 2]
+
+## 3. 통합 액션 플랜 (Top 3)
+### 1순위: [과제명]
+- **실행 방안**: [구체적인 실행 방안]
+- **담당**: [추천 담당 (예: 개인, 팀 리더)]
+### 2순위: [과제명]
+- **실행 방안**: [구체적인 실행 방안]
+- **담당**: [추천 담당]
+### 3순위: [과제명]
+- **실행 방안**: [구체적인 실행 방안]
+- **담당**: [추천 담당]
+
+## 4. 기대효과 및 제언
+- [제안된 전략 실행 시 기대할 수 있는 효과를 설명하고, 서비스팀 구성원들에게 동기를 부여하는 메시지]
+
+${baseConstraints}`
+            };
+
+            // --- 11. BUTTON EVENT LISTENERS PER SLIDE ---
+
+            // Slide 1: Persona
+            document.getElementById('persona-generator-btn')?.addEventListener('click', () => {
+                clearValidationError('1');
+                const name = document.getElementById('p1-name').value;
+                const info = document.getElementById('p1-info').value;
+                const pain = document.getElementById('p1-pain').value;
+
+                if (!validateInput(name, '페르소나 이름', '1', 2)) return;
+                if (!validateInput(info, '소속/직책', '1', 3)) return;
+                if (!validateInput(pain, '주요 어려움', '1', 10)) return;
+                
+                trainingData.persona = {
+                    name, info,
+                    purpose: document.getElementById('p1-purpose').value,
+                    goals: document.getElementById('p1-goals').value,
+                    pain, 
+                    channel: document.getElementById('p1-channel').value,
+                    mbti: document.getElementById('p1-mbti').value
+                };
+                
+                const prompt = promptTemplates.persona(trainingData.persona);
+                generateContent(prompt, `'${trainingData.persona.name}' 페르소나 분석`, 'persona-generator-btn');
+                document.getElementById('journey-title').textContent = `🗺️ '${trainingData.persona.name}'님의 여정 지도 만들기`;
+                saveTrainingData();
+            });
+            
+            // Slide 2: Journey
+            document.getElementById('journey-mapper-btn')?.addEventListener('click', () => {
+                clearValidationError('2');
+                const step1 = document.getElementById('j-step1').value;
+                if (!validateInput(step1, '신규 개발/샘플 단계', '2', 10)) return;
+
+                trainingData.journey = { 
+                    step1, 
+                    step2: document.getElementById('j-step2').value, 
+                    step3: document.getElementById('j-step3').value 
+                };
+                
+                const prompt = promptTemplates.journey(trainingData.journey, trainingData.persona);
+                generateContent(prompt, `B2B 고객 여정 지도 분석`, 'journey-mapper-btn');
+                saveTrainingData();
+            });
+
+            // Slide 3: VOC
+            document.getElementById('voc-analyzer-btn')?.addEventListener('click', () => {
+                clearValidationError('3');
+                const vocInput = document.getElementById('voc-input').value;
+                if (!validateInput(vocInput, 'VOC 내용', '3', 15)) return;
+
+                trainingData.vocInput = vocInput;
+                const prompt = promptTemplates.voc(trainingData.vocInput);
+                generateContent(prompt, `AI 기술 클레임(VOC) 심층 분석`, 'voc-analyzer-btn');
+                saveTrainingData();
+            });
+            
+            // Slide 4: Strategy
+            document.getElementById('strategy-generator-btn')?.addEventListener('click', () => {
+                clearValidationError('4');
+                const swot_s = document.getElementById('swot-s').value;
+                if (!validateInput(swot_s, '강점(Strengths)', '4', 5)) return;
+
+                trainingData.strategy = {
+                    swot_s,
+                    swot_w: document.getElementById('swot-w').value,
+                    swot_o: document.getElementById('swot-o').value,
+                    swot_t: document.getElementById('swot-t').value,
+                    competitor: document.getElementById('s-competitor').value
+                };
+                
+                const context = `
+- **페르소나 니즈**: ${trainingData.persona?.pain || 'N/A'}
+- **여정 Pain Point**: ${trainingData.journey?.step3 || 'N/A'}
+- **핵심 VOC**: ${trainingData.vocInput?.substring(0, 50) || 'N/A'}...`;
+
+                const prompt = promptTemplates.strategy(trainingData.strategy, context);
+                generateContent(prompt, `B2B 서비스 과제 우선순위 분석`, 'strategy-generator-btn');
+                saveTrainingData();
+            });
+
+            // Slide 5: Script
+            document.getElementById('m5-script-btn')?.addEventListener('click', () => {
+                clearValidationError('5');
+                const situation = document.getElementById('m5-situation').value;
+                if (!validateInput(situation, '상담/클레임 상황', '5', 15)) return;
+
+                trainingData.scriptSituation = situation;
+
+                let context = `
+- **고객 페르소나**: ${JSON.stringify(trainingData.persona, null, 2) || 'N/A'}
+- **우리팀 분석**: ${JSON.stringify(trainingData.strategy, null, 2) || 'N/A'}
+- **주요 MOT(지뢰)**: ${trainingData.journey?.step3 || 'N/A'}`;
+
+                const prompt = promptTemplates.script(trainingData.scriptSituation, context);
+                generateContent(prompt, `맞춤형 응대 스크립트`, 'm5-script-btn');
+                saveTrainingData();
+            });
+
+            // Slide 7: Final Report
+            document.getElementById('final-report-btn')?.addEventListener('click', () => {
+                clearValidationError('7');
+                // Final report depends on previous data, check if at least persona exists
+                if (!trainingData.persona?.name) {
+                    validateInput('', '워크샵 데이터가', '7', 999); // Show error
+                    return;
+                }
+                const prompt = promptTemplates.finalReport(trainingData);
+                generateContent(prompt, "B2B CX 솔루션 랩 최종 보고서", 'final-report-btn');
+            });
+            
+            // --- 12. INITIALIZE ---
+            
+            // Add listeners for auto-saving
+            const debouncedSave = debounce(saveTrainingData, 500);
+            document.querySelectorAll('input, textarea, select').forEach(el => {
+                el.addEventListener('input', debouncedSave);
+            });
+            
+            // Add listener for clear button
+            document.getElementById('clear-data-btn').addEventListener('click', clearTrainingData);
+            
+            // Add keyboard listeners
+            document.addEventListener('keydown', (e) => {
+                // Only act if modal is hidden
+                if (modal.classList.contains('hidden')) {
+                    if (e.key === 'ArrowRight' && !nextBtn.disabled) {
+                        nextBtn.click();
+                    } else if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
+                        prevBtn.click();
+                    }
+                } else {
+                    // If modal is open, Escape key should close it
+                    if (e.key === 'Escape') {
+                        closeModal();
+                    }
+                }
+            });
+
+            // Load data, setup progress bar, and show first slide
+            loadTrainingData();
+            setupProgressIndicator();
+            showSlide(currentSlide);
+        });
+    </script>
+</body>
+</html>
