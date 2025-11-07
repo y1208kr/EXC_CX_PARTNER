@@ -146,7 +146,10 @@
                                 <div><label class="font-bold">주요 업무 및 협업 목적</label><input type="text" id="p1-purpose" class="w-full p-2 mt-1 border rounded" placeholder="예: 차세대 강판 스펙 협의, 신차 적용 테스트"></div>
                                 <div><label class="font-bold">핵심 성공 요인 (KPIs)</label><textarea id="p1-goals" class="w-full p-2 mt-1 border rounded" rows="2" placeholder="예: 목표 강성 확보, 경량화 달성, 안정적인 납기"></textarea></div>
                                 <div><label class="font-bold">주요 불만 및 어려움 (Pain Points)</label><textarea id="p1-pain" class="w-full p-2 mt-1 border rounded" rows="2" placeholder="예: 기술 데이터가 부족함, 샘플 대응이 느림, 클레임 처리가 불명확함"></textarea></div>
-                                <div><label class="font-bold">주요 소통 채널</label><input type="text" id="p1-channel" class="w-full p-2 mt-1 border rounded" placeholder="예: 기술 미팅(대면), 이메일, 정기 교류회"></div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="font-bold">주요 소통 채널</label><input type="text" id="p1-channel" class="w-full p-2 mt-1 border rounded" placeholder="예: 기술 미팅(대면), 이메일, 정기 교류회"></div>
+                                    <div><label class="font-bold">핵심 성향 (T/F, J/P)</label><input type="text" id="p1-mbti" class="w-full p-2 mt-1 border rounded" placeholder="예: T(논리중심), J(계획중시)"></div>
+                                </div>
                                 <button id="persona-generator-btn" class="gemini-button w-full mt-4">✨ AI 페르소나 분석 및 기술 대응 전략 제안</button>
                             </div>
                         </div>
@@ -455,7 +458,7 @@
                             break;
                         case 4: // M5 (Script)
                             html = '<p class="font-bold text-sm">M1~M4 핵심 결과 불러오기</p><ul class="text-xs list-disc list-inside mt-1 space-y-1">';
-                            if (trainingData.persona?.name) { html += `<li><strong>M1 페르소나:</strong> ${trainingData.persona.name} (${trainingData.persona.pain})</li>`; hasContext = true; }
+                            if (trainingData.persona?.name) { html += `<li><strong>M1 페르소나:</strong> ${trainingData.persona.name} (${trainingData.persona.pain}, ${trainingData.persona.mbti || ''})</li>`; hasContext = true; }
                             if (trainingData.journey?.step1) { html += `<li><strong>M2 MOT(지뢰):</strong> '${trainingData.journey.step1.substring(0, 20)}...' 개선 필요</li>`; hasContext = true; }
                             if (trainingData.vocInput) { html += `<li><strong>M3 클레임:</strong> "${trainingData.vocInput.substring(0, 25)}..."</li>`; hasContext = true; }
                             if (trainingData.strategy?.swot_s) { html += `<li><strong>M4 우리팀 강점:</strong> ${trainingData.strategy.swot_s}</li>`; hasContext = true; }
@@ -487,7 +490,7 @@
                     const customerRole = document.getElementById('m6-role-customer');
                     const agentRole = document.getElementById('m6-role-agent');
                     
-                    let customerHtml = `<li><strong>고객 페르소나:</strong> ${trainingData.persona?.name || 'M1에서 정의'}</li>
+                    let customerHtml = `<li><strong>고객 페르소나:</strong> ${trainingData.persona?.name || 'M1에서 정의'} (${trainingData.persona?.mbti || 'T/F'})</li>
                                       <li><strong>클레임 상황:</strong> ${trainingData.vocInput?.substring(0, 40) || 'M3/M5에서 정의'}...</li>
                                       <li><strong>핵심 감정:</strong> ${trainingData.persona?.pain || 'M1에서 정의'}</li>`;
                     
@@ -533,7 +536,7 @@
                 let content = '';
                 
                 const modules = [
-                    { title: 'M1: B2B 고객 페르소나', data: trainingData.persona, fields: {name: '이름', info: '소속/직책', purpose: '협업 목적', pain: '주요 어려움'} },
+                    { title: 'M1: B2B 고객 페르소나', data: trainingData.persona, fields: {name: '이름', info: '소속/직책', purpose: '협업 목적', pain: '주요 어려움', mbti: '핵심 성향'} },
                     { title: 'M2: B2B 고객 여정 (MOT)', data: trainingData.journey, fields: {step1: '개발/샘플', step2: '양산/납품', step3: '품질/클레임'} },
                     { title: 'M3: 기술 클레임(VOC) 분석', data: trainingData, fields: {vocInput: '입력된 VOC'} },
                     { title: 'M4: B2B 서비스 전략 (SWOT)', data: trainingData.strategy, fields: {swot_s: '강점', swot_w: '약점', swot_o: '기회', swot_t: '위협', competitor: '경쟁사 분석'} },
@@ -587,7 +590,7 @@
                 // Google Search grounding을 활성화하기 위해 payload에 'tools' 속성을 추가합니다.
                 const payload = { 
                     contents: [{ parts: [{ text: prompt }] }],
-                    tools: [{ "google_search": {} }] // 이 부분이 추가되었습니다.
+                    tools: [{ "google_search": {} }] // Google Search enabled
                 };
 
                 try {
@@ -662,7 +665,8 @@
                 trainingData.persona = {
                     name: document.getElementById('p1-name').value, info: document.getElementById('p1-info').value,
                     purpose: document.getElementById('p1-purpose').value, goals: document.getElementById('p1-goals').value,
-                    pain: document.getElementById('p1-pain').value, channel: document.getElementById('p1-channel').value
+                    pain: document.getElementById('p1-pain').value, channel: document.getElementById('p1-channel').value,
+                    mbti: document.getElementById('p1-mbti').value // <-- ADDED
                 };
                 if (!trainingData.persona.name) { alert('페르소나 이름을 입력해주세요.'); return; }
                 const prompt = `당신은 '현대제철' B2B CX 컨설턴트입니다. 아래 B2B 고객 페르소나 정보를 바탕으로, 고객의 숨겨진 기술적 니즈(Unmet Needs)를 파악하고, 신뢰를 구축하기 위한 맞춤형 기술 지원 전략 3가지를 제안해주세요.
@@ -673,10 +677,11 @@
 - **핵심 성공 요인(KPI)**: ${trainingData.persona.goals}
 - **주요 어려움(Pain Points)**: ${trainingData.persona.pain}
 - **소통 채널**: ${trainingData.persona.channel}
+- **핵심 성향(T/F, J/P)**: ${trainingData.persona.mbti}
 
 ### 요청사항
-1. **페르소나 심층 분석**: 고객의 감정(불안감, 기대감 등)과 진짜 니즈를 추론하여 분석해주세요.
-2. **맞춤형 기술 지원 전략**: 고객의 Pain Point를 해결하고 신뢰를 줄 수 있는 구체적인 기술 지원 행동 3가지를 제안해주세요.`;
+1. **페르소나 심층 분석**: 고객의 감정(불안감, 기대감 등)과 진짜 니즈를 추론하여 분석해주세요. (입력된 T/F, J/P 성향을 반드시 반영)
+2. **맞춤형 기술 지원 전략**: 고객의 Pain Point와 성향을 해결하고 신뢰를 줄 수 있는 구체적인 기술 지원 행동 3가지를 제안해주세요.`;
                 generateContent(prompt, `'${trainingData.persona.name}' 페르소나 분석`);
                 document.getElementById('journey-title').textContent = `🗺️ '${trainingData.persona.name}'님의 여정 지도 만들기`;
             });
@@ -725,9 +730,9 @@ ${trainingData.vocInput}
                 };
                 if (!trainingData.strategy.swot_s) { alert('SWOT 분석을 입력해주세요.'); return; }
                 const contextPrompt = `### 종합 데이터
-- **페르소나 니즈**: ${trainingData.persona?.pain}
+- **페르소나 니즈**: ${trainingData.persona?.pain || 'N/A'}
 - **여정 Pain Point**: ${trainingData.journey?.step1 || ''} / ${trainingData.journey?.step2 || ''} / ${trainingData.journey?.step3 || ''}
-- **핵심 VOC**: ${trainingData.vocInput?.substring(0, 50)}...`;
+- **핵심 VOC**: ${trainingData.vocInput?.substring(0, 50) || 'N/A'}...`;
                 
                 const prompt = `당신은 '현대제철' 기술 서비스 전략가입니다. 아래 데이터를 바탕으로, 우리 팀이 실행 가능한 서비스 개선 과제를 도출하고 우선순위를 정해주세요.
 ${contextPrompt}
@@ -757,7 +762,7 @@ ${JSON.stringify(trainingData.strategy, null, 2)}
                 if (trainingData.journey) contextPrompt += `- **주요 MOT(지뢰)**: ${trainingData.journey.step3}\n`;
                 contextPrompt += `- **현재 상담/클레임 상황**: ${situation}\n`;
 
-                const prompt = `당신은 '현대제철'의 최고 기술 영업 및 클레임 대응 전문가(ACE)입니다. 아래의 종합 데이터와 구체적인 상담/클레임 상황을 바탕으로, 고객을 안심시키고 신뢰를 구축할 수 있는 이상적인 응대 스크립트를 작성해주세요.
+                const prompt = `당신은 '현대제철'의 최고 기술 영업 및 클레임 대응 전문가(ACE)입니다. 아래의 종합 데이터와 구체적인 상담/클레임 상황을 바탕으로, 고객을 안심시키고 신뢰를 구축할 수 있는 이상적인 응대 스크립트를 작성해주세요. (특히 고객 페르소나의 '핵심 성향(T/F, J/P)'을 반드시 반영)
 
 ${contextPrompt}
 
